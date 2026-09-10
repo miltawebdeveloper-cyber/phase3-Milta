@@ -38,10 +38,27 @@
     "build:nossg": "vite build",
     "prerender": "node scripts/prerender.mjs",
     "check:seo": "node scripts/check-hreflang.mjs && node scripts/check-seo.mjs",
+    "gen:templates": "node scripts/gen-service-templates.mjs",
+    "verify:blogs": "node scripts/verify-blogs-unchanged.mjs",
     "check:dist": "node scripts/check-dist.mjs",
     "package": "node scripts/check-dist.mjs && powershell -NoProfile -Command \"Compress-Archive -Path dist/* -DestinationPath deploy/site.zip -Force\"",
     "verify:deploy": "node scripts/verify-deploy.mjs",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "check:admin": "node scripts/admin-ui-check.mjs",
+    "check:content": "node scripts/content-ui-check.mjs",
+    "check:cms-preview": "node scripts/check-cms-preview.mjs",
+    "check:states": "node scripts/check-states-merge.mjs",
+    "check:lossless": "node scripts/check-document-lossless.mjs",
+    "check:empty": "node scripts/check-empty-sections.mjs",
+    "apply:templates": "node scripts/apply-service-templates.mjs",
+    "fix:breadcrumbs": "node scripts/fix-breadcrumbs.mjs",
+    "check:migration": "node scripts/check-migration-002.mjs",
+    "seed:states": "node scripts/check-migration-002.mjs --seed",
+    "check:delaware": "node scripts/check-delaware-layout.mjs",
+    "check:order": "node scripts/check-document-order.mjs",
+    "check:templates": "node scripts/check-service-templates.mjs",
+    "split:templates": "node scripts/split-service-templates.mjs",
+    "check:mapping": "node scripts/check-document-mapping.mjs"
   }
 }

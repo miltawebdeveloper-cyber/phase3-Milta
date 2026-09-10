@@ -108,13 +108,7 @@ const UkBookkeepingServicesSection = () => {
           {/* SERVICE CARDS GRID */}
           <Grid container spacing={4}>
             {services.map((item, index) => (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                md={3}   // 4 cards per row on desktop
-                key={index}
-              >
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
                 <Box
                   sx={{
                     width: "100%",

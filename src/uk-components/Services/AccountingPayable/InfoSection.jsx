@@ -70,16 +70,9 @@ const InfoSection = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={6}
-          alignItems="center"
-          sx={{
-            flexDirection: { xs: "column-reverse", md: "row" },
-          }}
-        >
+        <Grid container spacing={6} sx={{ alignItems: "center", flexDirection: { xs: "column-reverse", md: "row" } }}>
           {/* LEFT COLUMN */}
-          <Grid item xs={12} md={7}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Box sx={{ maxWidth: 560, mx: { xs: "auto", md: 0 } }}>
               {/* Label */}
               <Box
@@ -224,7 +217,7 @@ const InfoSection = () => {
           </Grid>
 
           {/* RIGHT COLUMN IMAGE */}
-          <Grid item xs={12} md={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Box
               component="img"
               src={AccountsPayableImage}

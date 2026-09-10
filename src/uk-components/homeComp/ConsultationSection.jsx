@@ -52,14 +52,9 @@ const ConsultationSection = () => {
     >
       <Container maxWidth="xl">
         <Box sx={{ maxWidth: 1200, mx: "auto" }}>
-          <Grid
-            container
-            spacing={{ xs: 6, sm: 6, md: 8 }}
-            alignItems="center"
-            direction={{ xs: "column-reverse", md: "row" }}
-          >
+          <Grid container spacing={{ xs: 6, sm: 6, md: 8 }} direction={{ xs: "column-reverse", md: "row" }} sx={{ alignItems: "center" }}>
             {/* LEFT COLUMN */}
-            <Grid item xs={12} md={5}>
+            <Grid size={{ xs: 12, md: 5 }}>
               <motion.div
                 variants={leftFade}
                 initial="hidden"
@@ -159,7 +154,7 @@ const ConsultationSection = () => {
             </Grid>
 
             {/* RIGHT COLUMN */}
-            <Grid item xs={12} md={7}>
+            <Grid size={{ xs: 12, md: 7 }}>
               <motion.div
                 variants={rightFade}
                 initial="hidden"

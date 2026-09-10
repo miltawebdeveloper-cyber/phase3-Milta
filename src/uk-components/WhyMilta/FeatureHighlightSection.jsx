@@ -100,17 +100,10 @@ const FeatureHighlightSection = () => {
         </motion.div>
 
         {/* ================= FEATURE CARDS ================= */}
-        <Grid container spacing={{ xs: 3, md: 4 }} justifyContent="center">
+        <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center" }}>
 
           {features.map((item, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={index}
-              sx={{ display: "flex" }}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: "flex" }}>
               <motion.div
                 variants={fadeUp}
                 initial="hidden"

@@ -130,17 +130,9 @@ const WhatWeDoSection = () => {
         </Box>
 
         {/* ================= SERVICES GRID ================= */}
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={4} sx={{ justifyContent: "center" }}>
           {services.map((item, index) => (
-            <Grid
-              item
-              key={index}
-              xs={12}
-              sm={6}
-              md={4}
-              display="flex"
-              justifyContent="center"
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
               {/* Card */}
               <Box
                 sx={{

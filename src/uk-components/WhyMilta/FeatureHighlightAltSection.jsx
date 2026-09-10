@@ -59,7 +59,7 @@ const FeatureHighlightAltSection = () => {
 
         <Grid container spacing={3}>
           {features.map((f, i) => (
-            <Grid item xs={12} key={i}>
+            <Grid size={{ xs: 12 }} key={i}>
               <motion.div initial="hidden" whileInView="visible" variants={fade} transition={{ duration: 0.25, delay: Math.min(i * 0.06, 0.15) }} viewport={{ once: true, margin: '0px 0px 900px 0px' }}>
                 <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start", bgcolor: "rgba(255,255,255,0.02)", p: { xs: 2, md: 3 }, borderRadius: 2 }}>
                   <Box sx={{ minWidth: 68, display: "flex", alignItems: "center", justifyContent: "center" }}>

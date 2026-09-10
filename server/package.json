@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ingest.test.mjs",
+    "test:routes": "node ingest.route.test.mjs",
+    "test:content": "node content.test.mjs",
+    "test:create": "node create.test.mjs"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +20,9 @@
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "mammoth": "^1.12.2",
     "multer": "^2.1.1",
-    "nodemailer": "^9.0.3"
+    "nodemailer": "^9.0.3",
+    "pdf-parse": "^2.4.5"
   }
 }

@@ -1,3 +1,4 @@
+require("./dns-bypass");
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -23,6 +24,19 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Multer for memory storage (file handling for application resumes)
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+// CMS admin API. Kept in its own module because it is the only part of this
+// server that uses the service role key and requires authentication — mixing it
+// into the public form handlers above would make that boundary easy to lose.
+const adminRouter = require("./admin");
+app.use("/api/admin", adminRouter);
+
+// Content Update API (state/city document workflow). Same auth gate.
+app.use("/api/content", require("./content"));
+
+// Same gate the admin router uses, reused for the one write path that lives
+// outside it. Defined here so it is impossible to add that route without it.
+const { requireAdmin } = adminRouter;
 
 // Both values may hold a comma-separated list, so split either one.
 const parseRecipients = (recipientsValue, fallbackEmail, fallbackName) => {
@@ -116,11 +130,25 @@ const newsletterRecipients = () =>
    1. BLOG ENDPOINTS
    ========================================= */
 
+// `table` arrives from the client on every blog route (the site has a US
+// `blogs` table and a UK `blogs_uk` one). It is chosen from a fixed allowlist
+// rather than trusted: the reads below run with the anon key, but a caller
+// should still never be able to aim these endpoints at an arbitrary table.
+const BLOG_TABLES = new Set(["blogs", "blogs_uk"]);
+
+const resolveBlogTable = (table) => {
+  const name = table || "blogs";
+  return BLOG_TABLES.has(name) ? name : null;
+};
+
 // Get Blogs (with filtering, ordering, limit options)
 app.get("/api/blogs", async (req, res) => {
   try {
     const { featured, editors_pick, limit, order, ascending, table } = req.query;
-    const tableName = table || "blogs";
+    const tableName = resolveBlogTable(table);
+    if (!tableName) {
+      return res.status(400).json({ error: `Unknown table "${table}".` });
+    }
 
     let query = supabase.from(tableName).select("*");
 
@@ -155,7 +183,10 @@ app.get("/api/blogs/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
     const { table } = req.query;
-    const tableName = table || "blogs";
+    const tableName = resolveBlogTable(table);
+    if (!tableName) {
+      return res.status(400).json({ error: `Unknown table "${table}".` });
+    }
 
     const { data, error } = await supabase
       .from(tableName)
@@ -166,9 +197,10 @@ app.get("/api/blogs/:slug", async (req, res) => {
     if (error) throw error;
     if (!data) return res.status(404).json({ error: "Blog not found" });
 
-    // Also get latest posts for the sidebar, similar to BlogDetails.jsx
+    // Latest posts for the sidebar come from the same table as the post, so a
+    // UK post lists UK posts and links to /uk/blogs/<uk-slug> — not US ones.
     const { data: latest, error: latestErr } = await supabase
-      .from("blogs")
+      .from(tableName)
       .select("*")
       .order("created_at", { ascending: false })
       .limit(5);
@@ -183,11 +215,29 @@ app.get("/api/blogs/:slug", async (req, res) => {
 });
 
 // Update Blog Content (Admin)
-app.post("/api/blogs/:id/update", async (req, res) => {
+//
+// Requires an admin bearer token. Before this gate existed the route was open to
+// the internet: the anon key it writes with is compiled into the public browser
+// bundle, there was no auth of any kind, and `table` was taken straight from the
+// request body — so any caller could rewrite any row in any table the anon key
+// could reach. Nothing in the app called it, which is the only reason that was
+// never exploited.
+//
+// `table` is chosen from the BLOG_TABLES allowlist (defined above) rather than
+// trusted, so a bad or malicious value can only ever select one of the two blog
+// tables.
+app.post("/api/blogs/:id/update", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { content, table } = req.body;
-    const tableName = table || "blogs";
+    const { content, table } = req.body || {};
+
+    if (typeof content !== "string") {
+      return res.status(400).json({ error: "content must be a string." });
+    }
+    const tableName = resolveBlogTable(table);
+    if (!tableName) {
+      return res.status(400).json({ error: `Unknown table "${table}".` });
+    }
 
     const { data, error } = await supabase
       .from(tableName)
@@ -200,6 +250,107 @@ app.post("/api/blogs/:id/update", async (req, res) => {
   } catch (error) {
     console.error(`POST /api/blogs/${req.params.id}/update error:`, error);
     res.status(500).json({ error: error.message });
+  }
+});
+
+/* =========================================
+   1b. CMS PAGE ENDPOINTS (public reads)
+
+   The browser talks to these instead of Supabase directly — some networks
+   filter *.supabase.co at the TLS/SNI layer, which left CMS service pages and
+   the areas-we-serve listing blank. RLS still applies: the anon key used here
+   sees published rows only.
+   ========================================= */
+
+// One published CMS page by URL. Trailing slashes are inconsistent in the
+// stored canonicals, so match both forms.
+app.get("/api/pages/by-url", async (req, res) => {
+  try {
+    const { url } = req.query;
+    if (!url) return res.status(400).json({ error: "url is required" });
+
+    const bare = String(url).replace(/\/+$/, "");
+    const { data, error } = await supabase
+      .from("pages")
+      .select("*")
+      .in("url", [`${bare}/`, bare])
+      .eq("status", "published")
+      .limit(1)
+      .maybeSingle();
+
+    if (error) throw error;
+    res.json(data ?? null);
+  } catch (error) {
+    console.error("GET /api/pages/by-url error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Every published state-service page, for the "areas we serve" listing. Paged
+// at 1000 because PostgREST caps a response there by default.
+app.get("/api/pages/state-service-links", async (_req, res) => {
+  try {
+    const out = [];
+    const SIZE = 1000;
+    for (let from = 0; ; from += SIZE) {
+      const { data, error } = await supabase
+        .from("pages")
+        .select("state,service,url,meta_title")
+        .eq("status", "published")
+        .eq("kind", "service_state")
+        .not("state", "is", null)
+        .order("state")
+        .range(from, from + SIZE - 1);
+
+      if (error) throw error;
+      out.push(...(data || []));
+      if (!data || data.length < SIZE) break;
+    }
+    res.json(out);
+  } catch (error) {
+    console.error("GET /api/pages/state-service-links error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Published page URLs, optionally filtered by kind. Used by sitemap / tooling.
+app.get("/api/pages/urls", async (req, res) => {
+  try {
+    const { kind, limit } = req.query;
+    let query = supabase.from("pages").select("url").eq("status", "published");
+    if (kind) query = query.eq("kind", kind);
+
+    const { data, error } = await query.limit(limit ? parseInt(limit, 10) : 50000);
+    if (error) throw error;
+    res.json((data || []).map((r) => r.url));
+  } catch (error) {
+    console.error("GET /api/pages/urls error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// State descriptions for the areas-we-serve listing. The `states` table is
+// optional (arrives with db/002) — if it isn't there yet, return {} so the page
+// falls back to its hand-written copy instead of blanking.
+app.get("/api/states/descriptions", async (_req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("states")
+      .select("name,slug,description")
+      .eq("status", "active");
+
+    if (error) throw error;
+
+    const out = {};
+    for (const row of data || []) {
+      if (row.description) {
+        out[row.slug || String(row.name).replace(/\s+/g, "").toLowerCase()] = row.description;
+      }
+    }
+    res.json(out);
+  } catch (error) {
+    console.warn("GET /api/states/descriptions (optional table):", error.message);
+    res.json({});
   }
 });
 
@@ -392,6 +543,13 @@ app.post("/api/apply", upload.single("resume"), async (req, res) => {
 /* =========================================
    SERVER START
    ========================================= */
+
+require("./services/pageService").listStates("state")
+  .then(s => console.log("SERVER STARTUP TEST: pageService states:", s.length))
+  .catch(e => {
+    console.error("SERVER STARTUP TEST FAILED MESSAGE:", e.message);
+    console.error("SERVER STARTUP TEST FAILED DETAILS:", e);
+  });
 
 app.listen(port, () => {
   console.log(`Backend Express Server running on port ${port}`);

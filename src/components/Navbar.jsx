@@ -131,7 +131,13 @@ const Navbar = () => {
   // Every service page (generic USA pages + all state service pages under
   // /us/services/) renders over a dark hero, so it gets the same transparent,
   // white-text navbar treatment as the About page.
-  const isServicePage = location.pathname.startsWith('/us/services/');
+  // The preview routes render the same rows at a second URL (/cms-preview/us/…,
+  // /delaware-preview/us/…). Matching the raw prefix alone left the navbar in
+  // its light-hero styling there — dark text on the dark hero, unreadable — so a
+  // reviewer saw a broken navbar that the real URL does not have. Stripping the
+  // prefix first makes the preview show what will actually ship.
+  const previewed = location.pathname.replace(/^\/(cms|delaware)-preview/, '');
+  const isServicePage = previewed.startsWith('/us/services/');
   const isDarkHero = mode === 'light' && (isServicePage || DARK_HERO_PATHS.includes(location.pathname));
   const onHero = !trigger && isDarkHero;
 

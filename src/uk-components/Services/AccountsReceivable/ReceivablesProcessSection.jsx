@@ -50,9 +50,9 @@ const ReceivablesInsightsSection = () => {
             Tools & Systems We Use
           </Typography>
 
-          <Grid container spacing={3} justifyContent="center"> 
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}> 
             {tools.map((tool, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index} sx={{ width: "100%", maxWidth:"300px"}}>
+              <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={index} sx={{ width: "100%", maxWidth:"300px" }}>
                 <Box
                   sx={{
                    
@@ -94,9 +94,9 @@ const ReceivablesInsightsSection = () => {
             The Purpose of Receivables Management
           </Typography>
 
-          <Grid container spacing={3} justifyContent="center">
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
             {purposePoints.map((point, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                 <Box
                   sx={{
                     p: 2,

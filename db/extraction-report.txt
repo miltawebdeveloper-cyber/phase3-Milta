@@ -1,0 +1,16 @@
+Extraction run 2026-09-01T09:43:00.015Z
+files scanned : 224
+rows produced : 224
+
+── WARN (8) ──
+  src/states/Salem/Bookkeeping.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/CPAfirms.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/DataEntry.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/DigitalMarketing.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/Financial.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/Payroll.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/Tax.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+  src/states/Salem/VirtualAssistance.jsx: "Salem" is a city and its copy never names a state — row written as draft with state = null, resolve before publishing
+
+── TODO (1) ──
+  src/states/California/Bookkeeping.jsx: legacy page — copy extracted from consts; section headings and intro prose are inline JSX and need entering in the editor

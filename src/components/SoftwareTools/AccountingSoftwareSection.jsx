@@ -183,16 +183,7 @@ This page explains how we use each accounting tool, why they matter, and how our
           }}
         >
           {softwareCards.map((item, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={3}
-              key={item.title}
-              sx={{
-                display: "flex",
-              }}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={item.title} sx={{ display: "flex" }}>
               <Card
                 component={motion.div}
                 {...fadeUp(index * 0.1)}

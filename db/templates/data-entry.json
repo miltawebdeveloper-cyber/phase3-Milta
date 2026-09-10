@@ -1,0 +1,70 @@
+{
+  "service": "Data Entry",
+  "breadcrumb": "Data Entry Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Our Identity and",
+      "ctaLabel": "Book a free 30-minute Zoom consultation today."
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 6,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our Efficient Accounting Data",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 9,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our Data Entry Services in",
+      "columns": 3
+    },
+    {
+      "key": "closing",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "Ready to transform your financial data",
+      "ctaLabel": "Contact us today",
+      "placement": "afterFaqs"
+    }
+  ],
+  "faqs": 8,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/outsourcing-accounting-data-entry-delaware/"
+  }
+}

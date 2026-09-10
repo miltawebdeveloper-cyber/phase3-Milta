@@ -1,0 +1,212 @@
+{
+  "service": "Tax",
+  "breadcrumb": "Tax Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Specializing in Business and Individual Tax Preparation Services in",
+      "ctaLabel": "Get Started Today with a Free Consultation!"
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Stay Compliant with Expert Tax Preparation Services in"
+    },
+    {
+      "key": "solutions",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 4,
+      "icons": [
+        "PersonIcon",
+        "BusinessIcon",
+        "AccountBalanceIcon",
+        "VolunteerActivismIcon"
+      ],
+      "exampleHeading": "Miltafs Comprehensive Tax Services: Expert Tax Preparation Services in"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "1. Tax Preparation Service in"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Federal Tax",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 3,
+      "icons": [
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "State NY Tax Preparation",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "paper",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Local Tax",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "default",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "2. Tax Review &"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "default",
+      "slots": 3,
+      "icons": [
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Tax Review",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "default",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Finalization &",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "3. Tax E-Filing"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Benefits of",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "paper",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "We E-File",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "default",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "4. Tax Forms We",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 7,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Understanding Key",
+      "columns": 3
+    },
+    {
+      "key": "checklists",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "default",
+      "slots": 4,
+      "icons": [],
+      "exampleHeading": "Why Partner"
+    },
+    {
+      "key": "closing",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "Ready to Simplify",
+      "ctaLabel": "Contact Us Today for a Free Consultation!"
+    }
+  ],
+  "faqs": 4,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/tax-planning-and-preparation-service-in-delaware/"
+  }
+}

@@ -163,16 +163,8 @@ const WhyChooseMilta = () => {
             }}
           >
             {features.map((f, index) => (
-              <Grid
-                key={index}
-                item
-                xs={12}
-                sm={6}
-                sx={{
-                  display: "flex",
-                  justifyContent: { xs: "center", md: "flex-start" },
-                }}
-              >
+              <Grid size={{ xs: 12, sm: 6 }} key={index} sx={{ display: "flex",
+                  justifyContent: { xs: "center", md: "flex-start" } }}>
                 <Box
                   component={motion.div}
                   initial={f.animation}

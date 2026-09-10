@@ -1,0 +1,146 @@
+{
+  "service": "Financial Controller",
+  "breadcrumb": "Financial Controller Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Elevate Your Financial Strategy with Expert Financial Controller Services in",
+      "ctaLabel": "Schedule Your Free Consultation Today."
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "Book Your Free Consultation Today –",
+      "ctaLabel": "Book Your Free Consultation Today"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "What is a Finance Controller"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "Controller vs. CFO: Different Roles,"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "What are Financial Controller"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "table",
+      "overline": "",
+      "bg": "paper",
+      "slots": 14,
+      "icons": [],
+      "exampleHeading": "Capabilities"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "When to Choose a"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "When to Choose a"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Miltafs Financial Controller Services"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 11,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our Financial Controller Services in",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 3,
+      "icons": [
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Who Can Benefit from",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Choose Miltafs for Financial",
+      "columns": 2
+    }
+  ],
+  "faqs": 12,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 10,
+    "example": "/us/services/financial-controller-services-in-arizona/"
+  }
+}

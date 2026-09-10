@@ -110,12 +110,14 @@ const BlogGridSection = () => {
               placeholder="Search articles…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: "text.secondary", fontSize: 20 }} />
-                  </InputAdornment>
-                ),
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: "text.secondary", fontSize: 20 }} />
+                    </InputAdornment>
+                  ),
+                },
               }}
               sx={{
                 width: { xs: "100%", md: 360 },

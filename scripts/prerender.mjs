@@ -64,8 +64,8 @@ const ORIGIN = 'https://www.miltafs.com';
 // inlined into all 181 files.
 const PRERENDER_CSS_NAME = 'prerender';
 
-// Authoring UI: no reason to prerender or list it.
-const EXCLUDE = new Set(['/uk/addblog']);
+// Authoring tools, not content. Never prerendered, never in the sitemap.
+const EXCLUDE = new Set(['/uk/addblog', '/admin', '/cms-preview/*', '/delaware-preview/*']);
 
 const CONCURRENCY = 4;
 
@@ -135,6 +135,52 @@ function loadEnv() {
   return out;
 }
 
+// CMS pages carry their own full path in `url`, so unlike blog posts there is no
+// prefix to attach — the row IS the route.
+//
+// Paged deliberately: PostgREST caps a response at 1000 rows by default, and the
+// whole point of moving pages into the database is that there will eventually be
+// far more than that. An unpaged read here would silently prerender the first
+// thousand and drop the rest, which is exactly the failure this file's blog
+// comment above describes happening once already.
+async function cmsPageRoutes() {
+  const env = loadEnv();
+  const url = env.VITE_SUPABASE_URL;
+  const key = env.VITE_SUPABASE_ANON_KEY;
+  if (!url || !key) return [];
+
+  const PAGE = 1000;
+  const routes = [];
+  try {
+    for (let from = 0; ; from += PAGE) {
+      const res = await fetch(
+        `${url}/rest/v1/pages?select=url&status=eq.published&order=url.asc`,
+        {
+          headers: {
+            apikey: key,
+            Authorization: `Bearer ${key}`,
+            Range: `${from}-${from + PAGE - 1}`,
+          },
+        },
+      );
+      // The table may not exist yet while the migration is in progress; that is
+      // not a build failure, it just means there is nothing to add.
+      if (res.status === 404 || res.status === 400) return [];
+      if (!res.ok) {
+        console.warn(`  ! pages: HTTP ${res.status} — skipped`);
+        return routes;
+      }
+      const rows = await res.json();
+      rows.map((r) => r.url).filter(Boolean).forEach((u) => routes.push(u));
+      if (rows.length < PAGE) break;
+    }
+    console.log(`  pages: ${routes.length} CMS page(s)`);
+  } catch (err) {
+    console.warn(`  ! pages: ${err.message} — skipped`);
+  }
+  return routes;
+}
+
 async function cmsBlogRoutes() {
   const env = loadEnv();
   const url = env.VITE_SUPABASE_URL;
@@ -175,7 +221,7 @@ const dynamicRoutes = allRoutes.filter((r) => r.includes(':'));
 const only = process.argv.slice(2).filter((a) => a.startsWith('/'));
 const staticRoutes = only.length
   ? only
-  : [...new Set(allRoutes.filter((r) => !r.includes(':') && !EXCLUDE.has(r)))];
+  : [...new Set(allRoutes.filter((r) => !r.includes(':') && !r.includes('*') && !EXCLUDE.has(r)))];
 
 // ── Local server (mimics the production Apache lookup order) ─────────────────
 
@@ -272,6 +318,43 @@ function serialise() {
   document
     .querySelectorAll('script[src*="googletagmanager.com"], script[src*="google-analytics.com"]')
     .forEach((el) => el.remove());
+
+  // An overlay that happens to be OPEN when the snapshot is taken does not just
+  // add its own markup — it leaves the whole document in the state a modal
+  // requires. Career.jsx auto-opens the application popup 600 ms after mount,
+  // well inside the wait below, so dist/career/index.html shipped all three of:
+  //
+  //   • the Dialog's <div role="presentation"> portal as a SIBLING of #root.
+  //     React only ever owns #root — capturePrerenderedShell() reads it and
+  //     render() empties it — so on boot nothing removes that portal. The real
+  //     dialog then opens ABOVE the dead copy, and closing it merely reveals the
+  //     copy, whose X button carries no handler and can never close. That is the
+  //     "the form won't close the second time, and only in production" bug.
+  //   • aria-hidden="true" on #root, so the entire page is hidden from assistive
+  //     tech and from anything else that honours it.
+  //   • style="overflow: hidden" on <body>, so the page cannot be scrolled at
+  //     all until React boots and MUI releases its scroll lock.
+  //
+  // None of it belongs in a static payload: React recreates every bit of it for
+  // itself on boot. Portals are the general case rather than a career-page
+  // special case — a portal is by definition transient overlay UI (Dialog, Menu,
+  // Snackbar, Tooltip) mounted outside #root, and the page content this
+  // prerender exists to capture all lives inside #root.
+  const KEEP_IN_BODY = new Set(['SCRIPT', 'STYLE', 'LINK', 'NOSCRIPT', 'TEMPLATE']);
+  for (const el of [...document.body.children]) {
+    if (el.id === 'root' || KEEP_IN_BODY.has(el.tagName)) continue;
+    el.remove();
+  }
+  // Scoped to body's own children on purpose: aria-hidden is legitimate on the
+  // hundreds of decorative <svg> icons deeper in the tree, and only the modal
+  // manager reaches out this far.
+  for (const el of document.body.children) {
+    el.removeAttribute('aria-hidden');
+    el.removeAttribute('inert');
+  }
+  document.body.style.removeProperty('overflow');
+  document.body.style.removeProperty('padding-right');
+  if (!document.body.getAttribute('style')) document.body.removeAttribute('style');
 
   // The page being serialised has already booted, so ThemeContext has stripped
   // the .pre-boot class that gates the theme rules in index.html. Putting it
@@ -384,6 +467,11 @@ async function renderRoute(page, port, route) {
   // framer-motion holds whileInView content at opacity:0 until it scrolls into
   // view. Walk the page so that copy is materialised in the snapshot.
   await page.evaluate(async () => {
+    // An auto-opened modal (Career.jsx) has MUI's scroll lock on <body>, which
+    // makes every scrollTo below a silent no-op and leaves the whileInView copy
+    // below the fold unmaterialised. Release it for the walk; serialise() clears
+    // it from the payload afterwards either way.
+    document.body.style.removeProperty('overflow');
     const step = Math.round(window.innerHeight * 0.8);
     // scrollHeight grows as sections mount, so it is re-read every iteration
     // rather than captured once.
@@ -493,6 +581,15 @@ async function main() {
       seen.add(normalise(route));
       queue.push(route);
     }
+    // CMS pages. While the migration is in progress a page can exist BOTH as a
+    // hard-coded route in App.jsx and as a row, so `seen` deduplicates and the
+    // hard-coded route wins — the source of truth does not change until its file
+    // is actually removed.
+    for (const route of await cmsPageRoutes()) {
+      if (seen.has(normalise(route)) || EXCLUDE.has(route)) continue;
+      seen.add(normalise(route));
+      queue.push(route);
+    }
     console.log('');
   }
   // Blog posts are Supabase rows, not routes. The rendered index pages know the
@@ -532,10 +629,20 @@ async function main() {
         const { css, ...rest } = r;
         css.forEach((rule) => cssUnion.add(rule));
 
+        // index.html preloads the homepage's LCP hero at high priority, but that
+        // file is the shell for EVERY route — so around 360 pages were fetching
+        // an image only the homepage renders. The browser says so out loud:
+        // "preloaded using link preload but not used within a few seconds".
+        //
+        // The preload is right; its scope was not. Strip it everywhere but "/".
+        const html = route === '/'
+          ? r.html
+          : r.html.replace(/\s*<link\b[^>]*rel="preload"[^>]*about_us\.webp[^>]*>/gi, '');
+
         const outs = [];
         for (const out of outputPaths(route)) {
           fs.mkdirSync(path.dirname(out), { recursive: true });
-          fs.writeFileSync(out, r.html, 'utf8');
+          fs.writeFileSync(out, html, 'utf8');
           written.push(out);
           outs.push(out);
         }

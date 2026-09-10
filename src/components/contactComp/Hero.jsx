@@ -3,8 +3,9 @@ import { Box, Container, Typography, Breadcrumbs, Link } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useTheme, alpha } from '@mui/material/styles';
 import { NavigateNext as NavigateNextIcon, Home as HomeIcon } from '@mui/icons-material';
+import CurrentCrumb from '../CurrentCrumb';
 
-const HeroModern = ({ title = "About Us", breadcrumbTitle = "About" }) => {
+const HeroModern = ({ title = "Contact Us", breadcrumbTitle = "Contact" }) => {
   const theme = useTheme();
   const primary = theme.palette.primary.main;
 
@@ -137,7 +138,7 @@ const HeroModern = ({ title = "About Us", breadcrumbTitle = "About" }) => {
                   Home
                 </Typography>
               </Link>
-              <Typography
+              <CurrentCrumb
                 variant="body2"
                 sx={{
                   color: alpha('#ffffff', 0.9),
@@ -146,7 +147,7 @@ const HeroModern = ({ title = "About Us", breadcrumbTitle = "About" }) => {
                 }}
               >
                 {breadcrumbTitle}
-              </Typography>
+              </CurrentCrumb>
             </Breadcrumbs>
           </motion.div>
           </motion.div>

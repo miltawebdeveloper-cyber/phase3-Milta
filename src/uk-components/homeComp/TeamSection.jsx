@@ -132,17 +132,8 @@ const TeamSection = () => {
         {/* ================= CARDS ================= */}
         <Grid container spacing={{ xs: 3, md: 4 }}>
           {workSteps.map((step, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4} // Desktop unchanged (3 per row)
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: { xs: "stretch", md: "center" },
-              }}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: "flex",
+                justifyContent: { xs: "stretch", md: "center" } }}>
               <motion.div
                 initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}

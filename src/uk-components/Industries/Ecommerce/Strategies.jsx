@@ -55,9 +55,9 @@ const Strategies = () => {
           </Typography>
 
           {/* Serve List */}
-          <Grid container spacing={3} justifyContent="center">
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
             {serveList.map((item) => (
-              <Grid item xs={12} sm={6} key={item.id} id={item.id}>
+              <Grid size={{ xs: 12, sm: 6 }} key={item.id} id={item.id}>
                 <Box
                   sx={{
                     display: "flex",

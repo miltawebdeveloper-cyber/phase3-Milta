@@ -62,8 +62,10 @@ const JobFilterBar = ({ onFilter }) => {
           fullWidth
           value={filters.search}
           onChange={(e) => handleChange("search", e.target.value)}
-          InputProps={{
-            startAdornment: <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />,
+          slotProps={{
+            input: {
+              startAdornment: <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />,
+            },
           }}
           sx={{ maxWidth: isMobile ? "100%" : 300 }}
         />

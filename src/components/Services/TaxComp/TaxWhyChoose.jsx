@@ -56,9 +56,9 @@ const TaxWhyChoose = () => {
         </Box>
 
         {/* 2-Column Grid Layout - Each row has exactly 2 columns */}
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={3} sx={{ justifyContent: "center" }}>
           {/* Row 1, Column 1 - Tax Preparation */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center' }}>
             <motion.div {...fadeUp(0.1)} style={{ height: '100%', width: '100%', maxWidth: 600 }}>
               <Box sx={{ 
                 p: 4, 
@@ -127,7 +127,7 @@ const TaxWhyChoose = () => {
           </Grid>
 
           {/* Row 1, Column 2 - Tax Review and Finalization */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center' }}>
             <motion.div {...fadeUp(0.15)} style={{ height: '100%', width: '100%', maxWidth: 600 }}>
               <Box sx={{ 
                 p: 4, 
@@ -184,7 +184,7 @@ const TaxWhyChoose = () => {
           </Grid>
 
           {/* Row 2, Column 1 - Tax Forms We Specialize In */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center' }}>
             <motion.div {...fadeUp(0.2)} style={{ height: '100%', width: '100%', maxWidth: 600 }}>
               <Box sx={{ 
                 p: 4, 
@@ -259,7 +259,7 @@ const TaxWhyChoose = () => {
           </Grid>
 
           {/* Row 2, Column 2 - Tax E-Filing */}
-          <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', justifyContent: 'center' }}>
             <motion.div {...fadeUp(0.25)} style={{ height: '100%', width: '100%', maxWidth: 600 }}>
               <Box sx={{ 
                 p: 4, 

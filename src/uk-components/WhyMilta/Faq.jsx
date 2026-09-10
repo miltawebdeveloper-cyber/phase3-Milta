@@ -212,11 +212,11 @@ const FaqSection = () => {
 
         {/* ✅ 2 COLUMN GRID */}
         <Grid container spacing={4} sx={{ textAlign: "left" }}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             {renderFaqs(leftFaqs, 0)}
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             {renderFaqs(rightFaqs, mid)}
           </Grid>
         </Grid>

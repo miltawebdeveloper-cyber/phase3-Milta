@@ -51,9 +51,9 @@ const BenefitsSection = () => {
           </Typography>
 
           {/* Serve List */}
-          <Grid container spacing={3} justifyContent="center">
+          <Grid container spacing={3} sx={{ justifyContent: "center" }}>
             {serveList.map((item, index) => (
-              <Grid item xs={12} sm={6} key={index}>
+              <Grid size={{ xs: 12, sm: 6 }} key={index}>
                 <Box
                   sx={{
                     display: "flex",

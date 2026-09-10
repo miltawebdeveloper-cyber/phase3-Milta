@@ -3,6 +3,7 @@ import { Box, Container, Typography, Breadcrumbs, Link } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useTheme, alpha } from '@mui/material/styles';
 import { NavigateNext as NavigateNextIcon, Home as HomeIcon } from '@mui/icons-material';
+import CurrentCrumb from '../CurrentCrumb';
 
 /**
  * Dark-green hero matching the industry pages.
@@ -95,9 +96,9 @@ const BlogHero = ({
                 <HomeIcon sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>Home</Typography>
               </Link>
-              <Typography variant="body2" sx={{ color: alpha('#ffffff', 0.9), fontWeight: 600, letterSpacing: '0.02em' }}>
+              <CurrentCrumb variant="body2" sx={{ color: alpha('#ffffff', 0.9), fontWeight: 600, letterSpacing: '0.02em' }}>
                 {crumb}
-              </Typography>
+              </CurrentCrumb>
             </Breadcrumbs>
           </motion.div>
         </Box>

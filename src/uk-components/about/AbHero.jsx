@@ -1,6 +1,7 @@
 // src/pages/AboutUs.jsx
 import React from "react";
 import { Box, Typography, Container, Breadcrumbs, Link } from "@mui/material";
+import CurrentCrumb from '../../components/CurrentCrumb';
 
 const heroImage =
   "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260";
@@ -69,7 +70,7 @@ const AboutUs = () => {
             <Link underline="hover" color="inherit" href="/">
               Home
             </Link>
-            <Typography color="#ffb966">About Company</Typography>
+            <CurrentCrumb color="#ffb966">About Company</CurrentCrumb>
           </Breadcrumbs>
         </Container>
       </Box>

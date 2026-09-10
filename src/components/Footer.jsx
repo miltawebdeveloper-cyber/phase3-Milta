@@ -90,7 +90,7 @@ const Footer = () => {
         <Grid container spacing={{ xs: 5, md: 8 }} sx={{ mb: { xs: 8, md: 10 } }}>
 
           {/* Brand column */}
-          <Grid item xs={12} md={3.5}>
+          <Grid size={{ xs: 12, md: 3.5 }}>
             <Stack spacing={4}>
               {/* Logo — use CSS filter to invert to white on dark bg */}
               <Box sx={{ width: 160, height: 80, display: 'flex', alignItems: 'center' }}>
@@ -166,7 +166,7 @@ const Footer = () => {
           </Grid>
 
           {/* Services */}
-          <Grid item xs={6} md={2.5} sx={{ ml: { xs: 0, md: 'auto' } }}>
+          <Grid size={{ xs: 6, md: 2.5 }} sx={{ ml: { xs: 0, md: 'auto' } }}>
             <Typography
               variant="overline"
               sx={{ fontWeight: 900, mb: 3, display: 'block', letterSpacing: 3, color: ACCENT, fontSize: '0.7rem' }}
@@ -190,7 +190,7 @@ const Footer = () => {
           </Grid>
 
           {/* Industries */}
-          <Grid item xs={6} md={2}>
+          <Grid size={{ xs: 6, md: 2 }}>
             <Typography
               variant="overline"
               sx={{ fontWeight: 900, mb: 3, display: 'block', letterSpacing: 3, color: ACCENT, fontSize: '0.7rem' }}
@@ -214,7 +214,7 @@ const Footer = () => {
           </Grid>
 
           {/* Company */}
-          <Grid item xs={6} md={2}>
+          <Grid size={{ xs: 6, md: 2 }}>
             <Typography
               variant="overline"
               sx={{ fontWeight: 900, mb: 3, display: 'block', letterSpacing: 3, color: ACCENT, fontSize: '0.7rem' }}

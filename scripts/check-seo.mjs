@@ -182,6 +182,49 @@ const record = (check, lines) => {
   record('meta descriptions are prose, not CSS', problems);
 }
 
+// ── no page ships with a modal frozen open ───────────────────────────────────
+// Career.jsx auto-opens the application popup 600 ms after mount, inside the
+// prerender's wait, so dist/career/*.html was serialised mid-modal and shipped
+// the Dialog's portal as a sibling of #root, aria-hidden="true" on #root, and
+// a body scroll lock. React owns only #root, so the stale portal survived boot
+// forever: the live dialog opened on top of it and closing that one just
+// revealed the dead copy, whose close button has no handler — the form could
+// not be closed a second time, in production only. Live 2026-08-21 to 08-31.
+//
+// serialise() in prerender.mjs now strips all three. This asserts on the built
+// HTML so any future auto-opening overlay fails the build instead of shipping.
+{
+  const problems = [];
+  for (const f of htmlFiles) {
+    const html = fs.readFileSync(f, 'utf8');
+    const body = html.slice(html.indexOf('<body'));
+
+    // A portal container is any body-level element that is not #root or inert
+    // head-ish markup. Matching role="presentation"/"dialog" outside #root is
+    // the cheap, specific signal — MUI stamps one on every Modal portal.
+    const rootEnd = (() => {
+      const open = body.indexOf('id="root"');
+      if (open === -1) return -1;
+      const re = /<(\/?)div\b[^>]*>/g;
+      re.lastIndex = body.indexOf('>', open) + 1;
+      let depth = 1, m;
+      while ((m = re.exec(body))) if ((depth += m[1] ? -1 : 1) === 0) return m.index;
+      return -1;
+    })();
+    if (rootEnd !== -1 && /<div[^>]*role="(presentation|dialog)"/.test(body.slice(rootEnd))) {
+      problems.push(`${rel(f)}  modal portal left outside #root`);
+    }
+
+    if (/<div[^>]*id="root"[^>]*\s(aria-hidden|inert)\b/.test(html)) {
+      problems.push(`${rel(f)}  #root is aria-hidden — whole page hidden from AT`);
+    }
+    if (/<body[^>]*style="[^"]*overflow:\s*hidden/.test(html)) {
+      problems.push(`${rel(f)}  <body> ships MUI's scroll lock — page cannot scroll`);
+    }
+  }
+  record('no page ships with a modal frozen open', problems);
+}
+
 // ── the DirectorySlash trap ──────────────────────────────────────────────────
 // A route that is BOTH a page and a parent of child routes gets written twice:
 // <name>.html and <name>/index.html. Apache's mod_dir then 301s the no-slash

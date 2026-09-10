@@ -1,0 +1,161 @@
+{
+  "service": "Payroll",
+  "breadcrumb": "Payroll Management Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Payroll Management Services in",
+      "ctaLabel": "Get Started with a Free Payroll Consultation."
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "End-to-End Payroll Management"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "",
+      "slots": 5,
+      "icons": [],
+      "exampleHeading": "What We Handle for",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "ScheduleIcon",
+        "PaymentsIcon",
+        "InsightsIcon",
+        "GavelIcon"
+      ],
+      "exampleHeading": "How Our Payroll Management",
+      "columns": 4
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 5,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Payroll Management Is Essential for",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Choose Outsourced Payroll",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "",
+      "slots": 5,
+      "icons": [],
+      "exampleHeading": "Is Payroll Outsourcing the Right Fit",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Key Advantages of Outsourced",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "",
+      "slots": 8,
+      "icons": [],
+      "exampleHeading": "Best Practices for Accurate",
+      "columns": 4
+    },
+    {
+      "key": "cardGroups",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "paper",
+      "slots": 5,
+      "icons": [],
+      "exampleHeading": "Trusted Payroll Data Security",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 8,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Payroll Management Services by",
+      "columns": 4
+    },
+    {
+      "key": "closing",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Partner with a Trusted Payroll",
+      "ctaLabel": "Get Started Today"
+    }
+  ],
+  "faqs": 4,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/payroll-management-services-in-the-arizona/"
+  }
+}

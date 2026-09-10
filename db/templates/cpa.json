@@ -1,0 +1,120 @@
+{
+  "service": "CPA",
+  "breadcrumb": "CPA Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Trusted CPA Firm in Delaware for",
+      "ctaLabel": "Schedule Your Free Consultation Today."
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "How Can We Support"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Why Outsource Your"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 5,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our CPA Services for Small",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 6,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our Core CPA Services in",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 6,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Choose Milta for CPA Services in",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 3,
+      "icons": [
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Specialized CPA Services for",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 5,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "How Milta Supports",
+      "columns": 3
+    }
+  ],
+  "faqs": 5,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/best-cpa-services-for-small-businesses-in-the-arizona/"
+  }
+}

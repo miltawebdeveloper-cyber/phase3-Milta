@@ -9,5 +9,11 @@ Allow: /
 
 # Authoring UI, not content.
 Disallow: /uk/addblog
+Disallow: /admin
+
+# Renders published pages at a second URL; kept out of the index so it can
+# never compete with the real ones.
+Disallow: /cms-preview
+Disallow: /delaware-preview
 
 Sitemap: https://www.miltafs.com/sitemap.xml

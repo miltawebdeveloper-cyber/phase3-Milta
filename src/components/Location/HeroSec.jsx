@@ -5,6 +5,7 @@ import { useTheme, alpha } from "@mui/material/styles";
 import HomeIcon from "@mui/icons-material/Home";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as RouterLink } from "react-router-dom";
+import CurrentCrumb from '../CurrentCrumb';
 
 const HeroSec = ({
   title = "Areas We Serve",
@@ -190,7 +191,7 @@ const HeroSec = ({
                   Home
                 </Typography>
               </Link>
-              <Typography
+              <CurrentCrumb
                 variant="body2"
                 sx={{
                   color: alpha("#ffffff", 0.9),
@@ -198,7 +199,7 @@ const HeroSec = ({
                 }}
               >
                 {breadcrumbPage}
-              </Typography>
+              </CurrentCrumb>
             </Breadcrumbs>
           </motion.div>
         </Box>

@@ -1,0 +1,111 @@
+{
+  "service": "Virtual Assistant",
+  "breadcrumb": "Virtual Assistant Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Unlock Rewarding Opportunities with Virtual Assistant Service in",
+      "ctaLabel": "Book a Free Consultation Today!"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "SavingsIcon",
+        "TrendingUpIcon",
+        "TuneIcon",
+        "SupportAgentIcon"
+      ],
+      "exampleHeading": "Benefits of Virtual Assistant Services in",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 1,
+      "icons": [],
+      "exampleHeading": "Focus on Growth, Leave the",
+      "ctaLabel": "Get Started Today."
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 12,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Our Virtual Assistant Services in",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 5,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Choose Milta for",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 4,
+      "icons": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "How to",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Transform Your Business with Milta",
+      "ctaLabel": "Contact Us Today"
+    }
+  ],
+  "faqs": 5,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/virtual-assistant-service-in-arizona"
+  }
+}

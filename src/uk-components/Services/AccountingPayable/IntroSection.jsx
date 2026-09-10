@@ -21,7 +21,7 @@ const AccountsPayableIntroSection = () => {
         >
           
           {/* ================= LEFT SIDE (TEXT) ================= */}
-          <Grid item xs={12} md={6} display="flex" justifyContent="center">
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: "flex", justifyContent: "center" }}>
             <Box sx={{ maxWidth: 600, width: "100%" }}>
               
               {/* Section Label */}
@@ -142,7 +142,7 @@ const AccountsPayableIntroSection = () => {
           </Grid>
 
           {/* ================= RIGHT SIDE (IMAGE) ================= */}
-          <Grid item xs={12} md={6} display="flex" justifyContent="center">
+          <Grid size={{ xs: 12, md: 6 }} sx={{ display: "flex", justifyContent: "center" }}>
             <Box
               component="img"
               src={accountsPayable}

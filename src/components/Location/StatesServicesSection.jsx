@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   List,
@@ -7,12 +7,14 @@ import {
   Typography,
   Container,
   Collapse,
+  CircularProgress,
 } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme, alpha } from "@mui/material/styles";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import { statesData } from "./statesData";
+import { mergeStateServices } from "./mergeStateServices";
+import { getStateServiceLinks, getStateDescriptions } from "../../api/pages";
 import { Link } from "react-router-dom";
 
 const fadeUp = (delay = 0) => ({
@@ -25,8 +27,40 @@ const fadeUp = (delay = 0) => ({
 const StatesServicesSection = () => {
   const theme = useTheme();
   const accent = theme.palette.primary.light;
-  const stateKeys = Object.keys(statesData);
-  const [activeState, setActiveState] = useState(stateKeys[0]);
+  // `null` = still loading. There is deliberately no hand-written fallback
+  // list here any more: this section shows exactly what is live in the CMS
+  // right now, so a page just created appears on the next load and a page
+  // just removed is simply absent from it — nothing to reconcile, because
+  // nothing but the fetch below ever populates it. The prerenderer waits for
+  // network idle, so the snapshot it takes already reflects this fetch.
+  const [data, setData] = useState(null);
+  const [failed, setFailed] = useState(false);
+  const stateKeys = data ? Object.keys(data) : [];
+  const [activeState, setActiveState] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    // Links and descriptions are fetched together: a state's listing needs
+    // both its service links and its own copy, and applying them in one
+    // update avoids the listing rendering half-merged.
+    Promise.all([getStateServiceLinks(), getStateDescriptions()]).then(([rows, descriptions]) => {
+      if (cancelled) return;
+      // Built from an EMPTY base — see mergeStateServices — so a state that
+      // no longer has a published page in the CMS does not appear here just
+      // because it once did.
+      let merged = mergeStateServices({}, rows);
+      if (Object.keys(descriptions).length) {
+        const out = { ...merged };
+        for (const [key, description] of Object.entries(descriptions)) {
+          if (out[key]) out[key] = { ...out[key], description };
+        }
+        merged = out;
+      }
+      setData(merged);
+      setActiveState((current) => current && merged[current] ? current : Object.keys(merged)[0] || null);
+    }).catch(() => { if (!cancelled) { setData({}); setFailed(true); } });
+    return () => { cancelled = true; };
+  }, []);
 
   const prettify = (s) => s.replace(/([A-Z])/g, " $1").trim();
 
@@ -128,6 +162,24 @@ const StatesServicesSection = () => {
           </motion.div>
         </Box>
 
+        {/* Loading and empty states get their own branches rather than a
+            blank gap, but neither of them is stale content — data is null
+            only until the CMS fetch above resolves, and stateKeys is only
+            empty when the CMS genuinely has no published state service page
+            right now. */}
+        {data === null ? (
+          <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}>
+            <CircularProgress size={28} sx={{ color: accent }} />
+          </Box>
+        ) : stateKeys.length === 0 ? (
+          <Box sx={{ textAlign: "center", py: 4 }}>
+            <Typography sx={{ color: alpha("#ffffff", 0.75) }}>
+              {failed
+                ? "State listings are temporarily unavailable — please check back shortly."
+                : "State pages are being added — check back soon."}
+            </Typography>
+          </Box>
+        ) : (
         <motion.div {...fadeUp(0.25)}>
           <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" }, gap: { xs: 2, md: 4 } }}>
             {/* LEFT SIDEBAR */}
@@ -145,7 +197,7 @@ const StatesServicesSection = () => {
             >
               <List disablePadding>
                 {stateKeys.map((state) => {
-                  const { description, services } = statesData[state];
+                  const { description, services } = data[state];
                   const isActive = activeState === state;
 
                   return (
@@ -234,11 +286,11 @@ const StatesServicesSection = () => {
                   </Typography>
 
                   <Typography sx={{ color: alpha("#ffffff", 0.8), mb: 3 }}>
-                    {statesData[activeState].description}
+                    {data[activeState]?.description}
                   </Typography>
 
                   <List disablePadding>
-                    {statesData[activeState].services.map((service, index) => (
+                    {(data[activeState]?.services || []).map((service, index) => (
                       <ServiceLink key={index} service={service} />
                     ))}
                   </List>
@@ -247,6 +299,7 @@ const StatesServicesSection = () => {
             </Box>
           </Box>
         </motion.div>
+        )}
       </Container>
     </Box>
   );

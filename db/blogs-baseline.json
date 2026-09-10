@@ -1,0 +1,38 @@
+{
+  "captured": "2026-08-31T10:25:25.889Z",
+  "tables": {
+    "blogs": {
+      "rows": 73,
+      "columns": [
+        "author",
+        "category",
+        "content",
+        "created_at",
+        "editors_pick",
+        "excerpt",
+        "featured",
+        "id",
+        "image_url",
+        "slug",
+        "title",
+        "uuid"
+      ]
+    },
+    "blogs_uk": {
+      "rows": 2,
+      "columns": [
+        "author",
+        "category",
+        "content",
+        "created_at",
+        "editors_pick",
+        "featured",
+        "id",
+        "image_url",
+        "slug",
+        "title",
+        "uuid"
+      ]
+    }
+  }
+}

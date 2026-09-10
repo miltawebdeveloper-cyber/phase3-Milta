@@ -3201,6 +3201,82 @@ export const blogSEOUk = {
       }
     ]
   }, 
+    "sales-tax-nexus-for-manufacturers": {
+    "title": "Sales Tax Nexus for Manufacturers: What Triggers It",
+    "description": "Learn how multi-state sales create sales tax nexus for manufacturers under 2026's shifting state thresholds, and the compliance steps that prevent audits.",
+    "author": "Milta Accounting Services",
+    "keywords": "sales tax nexus for manufacturers, multi-state sales tax compliance, manufacturing tax compliance",
+    "canonical": "https://www.miltafs.com/us/blogs/sales-tax-nexus-for-manufacturers",
+    "ogImage": "https://www.miltafs.com/images/miltafs-og.jpg",
+    "schema": [
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Multi-State Sales Tax Nexus: A Growing Headache for US Manufacturers",
+        "description": "Learn how multi-state sales create sales tax nexus for manufacturers under 2026's shifting state thresholds, and the compliance steps that prevent audits.",
+        "image": "https://www.miltafs.com/images/miltafs-og.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Milta Accounting Services",
+          "url": "https://www.miltafs.com/"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Milta Accounting Services",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.miltafs.com/logo.svg"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://www.miltafs.com/us/blogs/sales-tax-nexus-for-manufacturers"
+        },
+        "url": "https://www.miltafs.com/us/blogs/sales-tax-nexus-for-manufacturers",
+        "datePublished": "2026-08-31",
+        "dateModified": "2026-08-31"
+      }
+    ]
+  },
+  
+  "bookkeeping-for-multi-location-restaurants": {
+    "title": "Bookkeeping for Multi-Location Restaurants: Sync Issues",
+    "description": "Learn why books fall out of sync across restaurant locations, and how consolidated, weekly reconciliation keeps every unit's numbers accurate together.",
+    "author": "Milta Accounting Services",
+    "keywords": "bookkeeping for multi-location restaurants, multi-location restaurant accounting, restaurant accounting software",
+    "canonical": "https://www.miltafs.com/us/blogs/bookkeeping-for-multi-location-restaurants",
+    "ogImage": "https://www.miltafs.com/images/miltafs-og.jpg",
+    "schema": [
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Running Multiple Locations? Why Restaurant Books Fall Out of Sync",
+        "description": "Learn why books fall out of sync across restaurant locations, and how consolidated, weekly reconciliation keeps every unit's numbers accurate together.",
+        "image": "https://www.miltafs.com/images/miltafs-og.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Milta Accounting Services",
+          "url": "https://www.miltafs.com/"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Milta Accounting Services",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.miltafs.com/logo.svg"
+          }
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://www.miltafs.com/us/blogs/bookkeeping-for-multi-location-restaurants"
+        },
+        "url": "https://www.miltafs.com/us/blogs/bookkeeping-for-multi-location-restaurants",
+        "datePublished": "2026-09-01",
+        "dateModified": "2026-09-01"
+      }
+    ]
+  },
+
 };
 
 const ORIGIN = "https://www.miltafs.com";

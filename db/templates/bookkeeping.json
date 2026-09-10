@@ -1,0 +1,82 @@
+{
+  "service": "Bookkeeping",
+  "breadcrumb": "Bookkeeping Services in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "The Best Bookkeeping Services for Small Businesses in",
+      "ctaLabel": "To Arrange Your Free Initial Consultation, Contact Us Right Now!"
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Top-Notch Bookkeeping Services for Your"
+    },
+    {
+      "key": "whyEssential",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "default",
+      "slots": 4,
+      "icons": [],
+      "exampleHeading": "Bookkeeping Service Why Does Every"
+    },
+    {
+      "key": "solutions",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 4,
+      "icons": [
+        "AccountBalanceIcon",
+        "PaymentsIcon",
+        "CurrencyExchangeIcon",
+        "VerifiedUserIcon"
+      ],
+      "exampleHeading": "Why Choose Milta for"
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 8,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Comprehensive Bookkeeping and Financial Solutions",
+      "columns": 2
+    },
+    {
+      "key": "industries",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "",
+      "slots": 13,
+      "icons": [],
+      "exampleHeading": "Industries We Serve for"
+    }
+  ],
+  "faqs": 10,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/best-bookkeeping-services-in-delaware/"
+  }
+}

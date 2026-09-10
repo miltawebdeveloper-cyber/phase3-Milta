@@ -99,9 +99,9 @@ const ContactInfoSection = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={{ xs: 6, md: 8 }} alignItems="flex-start">
+        <Grid container spacing={{ xs: 6, md: 8 }} sx={{ alignItems: "flex-start" }}>
           {/* ================= LEFT CONTENT ================= */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +159,7 @@ const ContactInfoSection = () => {
           </Grid>
 
           {/* ================= RIGHT CONTACT INFO ================= */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

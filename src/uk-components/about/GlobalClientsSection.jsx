@@ -42,9 +42,9 @@ const GlobalClientsSection = () => {
         </Typography>
 
         {/* Logos */}
-        <Grid container spacing={4} justifyContent="center" alignItems="center">
+        <Grid container spacing={4} sx={{ justifyContent: "center", alignItems: "center" }}>
           {clientLogos.map((logo, index) => (
-            <Grid item xs={6} sm={4} md={2} key={index}>
+            <Grid size={{ xs: 6, sm: 4, md: 2 }} key={index}>
               <Box
                 component="img"
                 src={logo}

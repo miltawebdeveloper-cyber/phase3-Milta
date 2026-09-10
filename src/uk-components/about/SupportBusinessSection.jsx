@@ -82,23 +82,10 @@ const SupportServicesSection = () => {
         </Typography>
 
         {/* Services Grid */}
-        <Grid
-          container
-          spacing={{ xs: 3, md: 4 }}
-          justifyContent="center"
-        >
+        <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center" }}>
           {services.map((service, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: "flex",
+                justifyContent: "center" }}>
               <motion.div
                 initial={getAnimation(index, { xs: true })} // Simplified check for instruction purposes
                 whileInView={{ x: 0, y: 0, opacity: 1 }}

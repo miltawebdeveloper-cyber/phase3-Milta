@@ -92,11 +92,11 @@ const AboutAccountingSection = () => {
         </Typography>
 
         {/* Cards Grid */}
-        <Grid container spacing={{ xs: 3, md: 5 }} justifyContent="center">
+        <Grid container spacing={{ xs: 3, md: 5 }} sx={{ justifyContent: "center" }}>
           {features.map((feature, index) => {
             const Icon = iconMap[feature.title] || CheckCircleRoundedIcon;
             return (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
                 <Box
                 sx={{
                   maxWidth: { xs: "100%", sm: 340 }, // 📱 No fixed width on mobile

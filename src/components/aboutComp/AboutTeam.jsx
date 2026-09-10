@@ -67,7 +67,7 @@ const AboutTeam = () => {
 
         <Grid container spacing={{ xs: 4, md: 5 }}>
           {team.map((member, index) => (
-            <Grid item xs={12} sm={6} md={4} key={index}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}

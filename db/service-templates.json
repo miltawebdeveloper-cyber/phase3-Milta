@@ -1,0 +1,997 @@
+{
+  "Bookkeeping": {
+    "service": "Bookkeeping",
+    "breadcrumb": "Bookkeeping Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "The Best Bookkeeping Services for Small Businesses in",
+        "ctaLabel": "To Arrange Your Free Initial Consultation, Contact Us Right Now!"
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Top-Notch Bookkeeping Services for Your"
+      },
+      {
+        "key": "whyEssential",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "default",
+        "slots": 4,
+        "icons": [],
+        "exampleHeading": "Bookkeeping Service Why Does Every"
+      },
+      {
+        "key": "solutions",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 4,
+        "icons": [
+          "AccountBalanceIcon",
+          "PaymentsIcon",
+          "CurrencyExchangeIcon",
+          "VerifiedUserIcon"
+        ],
+        "exampleHeading": "Why Choose Milta for"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 8,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Comprehensive Bookkeeping and Financial Solutions",
+        "columns": 2
+      },
+      {
+        "key": "industries",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "",
+        "slots": 13,
+        "icons": [],
+        "exampleHeading": "Industries We Serve for"
+      }
+    ],
+    "faqs": 10,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/best-bookkeeping-services-in-delaware/"
+    }
+  },
+  "CPA": {
+    "service": "CPA",
+    "breadcrumb": "CPA Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Trusted CPA Firm in Delaware for",
+        "ctaLabel": "Schedule Your Free Consultation Today."
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "How Can We Support"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Why Outsource Your"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 5,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our CPA Services for Small",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 6,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our Core CPA Services in",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 6,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Choose Milta for CPA Services in",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 3,
+        "icons": [
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Specialized CPA Services for",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 5,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "How Milta Supports",
+        "columns": 3
+      }
+    ],
+    "faqs": 5,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/best-cpa-services-for-small-businesses-in-the-delaware/"
+    }
+  },
+  "Data Entry": {
+    "service": "Data Entry",
+    "breadcrumb": "Data Entry Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Our Identity and",
+        "ctaLabel": "Book a free 30-minute Zoom consultation today."
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 6,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our Efficient Accounting Data",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 9,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our Data Entry Services in",
+        "columns": 3
+      },
+      {
+        "key": "closing",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "Ready to transform your financial data",
+        "ctaLabel": "Contact us today",
+        "placement": "afterFaqs"
+      }
+    ],
+    "faqs": 8,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/outsourcing-accounting-data-entry-delaware/"
+    }
+  },
+  "Digital Marketing": {
+    "service": "Digital Marketing",
+    "breadcrumb": "Digital Marketing Agency in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "AI-Driven Marketing & Advertising to Accelerate Your",
+        "ctaLabel": "Request a Proposal Today!"
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Engage Your Audience with Precision"
+      },
+      {
+        "key": "whyEssential",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "default",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Why Partner",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 8,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Milta Digital Marketing Services in",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 6,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Choose Milta as Your Digital Marketing Service in",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 5,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Select Milta as Your Partner in",
+        "columns": 3
+      }
+    ],
+    "faqs": 5,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/best-digital-marketing-agency-in-delaware"
+    }
+  },
+  "Financial Controller": {
+    "service": "Financial Controller",
+    "breadcrumb": "Financial Controller Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Elevate Your Financial Strategy with Expert Financial Controller Services in",
+        "ctaLabel": "Schedule Your Free Consultation Today."
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "Book Your Free Consultation Today –",
+        "ctaLabel": "Book Your Free Consultation Today"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "What is a Finance Controller"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "Controller vs. CFO: Different Roles,"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "What are Financial Controller"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "table",
+        "overline": "",
+        "bg": "paper",
+        "slots": 14,
+        "icons": [],
+        "exampleHeading": "Capabilities"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "When to Choose a"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "When to Choose a"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Miltafs Financial Controller"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 11,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our Financial Controller Services in",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 3,
+        "icons": [
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Who Can Benefit from",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Choose Miltafs for Financial",
+        "columns": 2
+      }
+    ],
+    "faqs": 12,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 10,
+      "example": "/us/services/financial-controller-services-in-delaware/"
+    }
+  },
+  "Payroll": {
+    "service": "Payroll",
+    "breadcrumb": "Payroll Management Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Payroll Management Services in",
+        "ctaLabel": "Get Started with a Free Payroll Consultation."
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "End-to-End Payroll Management"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "",
+        "slots": 5,
+        "icons": [],
+        "exampleHeading": "What We Handle for",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "ScheduleIcon",
+          "PaymentsIcon",
+          "InsightsIcon",
+          "GavelIcon"
+        ],
+        "exampleHeading": "How Our Payroll Management",
+        "columns": 4
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 5,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Payroll Management Is Essential for",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Choose Outsourced Payroll",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "",
+        "slots": 5,
+        "icons": [],
+        "exampleHeading": "Is Payroll Outsourcing the Right Fit",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Key Advantages of Outsourced",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "",
+        "slots": 8,
+        "icons": [],
+        "exampleHeading": "Best Practices for Accurate",
+        "columns": 4
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "paper",
+        "slots": 5,
+        "icons": [],
+        "exampleHeading": "Trusted Payroll Data Security",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 8,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Payroll Management Services by",
+        "columns": 4
+      },
+      {
+        "key": "closing",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Partner with a Trusted Payroll",
+        "ctaLabel": "Get Started Today"
+      }
+    ],
+    "faqs": 4,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/payroll-management-services-in-the-delaware/"
+    }
+  },
+  "Tax": {
+    "service": "Tax",
+    "breadcrumb": "Tax Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Specializing in Business and Individual Tax Preparation Services in",
+        "ctaLabel": "Get Started Today with a Free Consultation!"
+      },
+      {
+        "key": "prose",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Stay Compliant with Expert Tax Preparation Services in"
+      },
+      {
+        "key": "solutions",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 4,
+        "icons": [
+          "PersonIcon",
+          "BusinessIcon",
+          "AccountBalanceIcon",
+          "VolunteerActivismIcon"
+        ],
+        "exampleHeading": "Miltafs Comprehensive Tax Services: Expert Tax Preparation Services in"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "1. Tax Preparation Service in"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Federal Tax",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 3,
+        "icons": [
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "State NY Tax Preparation",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "paper",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Local Tax",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "default",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "2. Tax Review &"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "default",
+        "slots": 3,
+        "icons": [
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Tax Review",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "default",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Finalization &",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "3. Tax E-Filing"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Benefits of",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "paper",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "We E-File",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "default",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "4. Tax Forms We",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 7,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Understanding Key",
+        "columns": 3
+      },
+      {
+        "key": "checklists",
+        "kind": "checklist",
+        "overline": "",
+        "bg": "default",
+        "slots": 4,
+        "icons": [],
+        "exampleHeading": "Why Partner"
+      },
+      {
+        "key": "closing",
+        "kind": "prose",
+        "overline": "",
+        "bg": "paper",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "Ready to Simplify",
+        "ctaLabel": "Contact Us Today for a Free Consultation!"
+      }
+    ],
+    "faqs": 4,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/tax-planning-and-preparation-service-in-delaware/"
+    }
+  },
+  "Virtual Assistant": {
+    "service": "Virtual Assistant",
+    "breadcrumb": "Virtual Assistant Services in",
+    "sections": [
+      {
+        "key": "intro",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 3,
+        "icons": [],
+        "exampleHeading": "Unlock Rewarding Opportunities with Virtual Assistant Service in",
+        "ctaLabel": "Book a Free Consultation Today!"
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "SavingsIcon",
+          "TrendingUpIcon",
+          "TuneIcon",
+          "SupportAgentIcon"
+        ],
+        "exampleHeading": "Benefits of Virtual Assistant Services in",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 1,
+        "icons": [],
+        "exampleHeading": "Focus on Growth, Leave the",
+        "ctaLabel": "Get Started Today."
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 12,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Our Virtual Assistant Services in",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "",
+        "slots": 5,
+        "icons": [
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "Why Choose Milta for",
+        "columns": 3
+      },
+      {
+        "key": "cardGroups",
+        "kind": "cards",
+        "overline": "",
+        "bg": "paper",
+        "slots": 4,
+        "icons": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "exampleHeading": "How to",
+        "columns": 2
+      },
+      {
+        "key": "cardGroups",
+        "kind": "prose",
+        "overline": "",
+        "bg": "",
+        "slots": 2,
+        "icons": [],
+        "exampleHeading": "Transform Your Business with Milta",
+        "ctaLabel": "Contact Us Today"
+      }
+    ],
+    "faqs": 5,
+    "derivedFrom": {
+      "pages": 27,
+      "matching": 13,
+      "example": "/us/services/virtual-assistant-service-in-delaware/"
+    }
+  }
+}

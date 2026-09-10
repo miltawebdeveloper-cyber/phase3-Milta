@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import ConsultationButton from '../../ConsultationButton';
 import { useTheme, alpha } from '@mui/material/styles';
 import { NavigateNext as NavigateNextIcon, Home as HomeIcon } from '@mui/icons-material';
+import CurrentCrumb from '../../CurrentCrumb';
 
 const HeroModern = ({ title = "Tax Planning and Preparation Services", breadcrumbTitle = "Tax Planning Services" }) => {
   const theme = useTheme();
@@ -134,12 +135,12 @@ const HeroModern = ({ title = "Tax Planning and Preparation Services", breadcrum
                 <HomeIcon sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>Home</Typography>
               </Link>
-              <Typography
+              <CurrentCrumb
                 variant="body2"
                 sx={{ color: alpha('#ffffff', 0.9), fontWeight: 600, letterSpacing: '0.02em' }}
               >
                 {breadcrumbTitle}
-              </Typography>
+              </CurrentCrumb>
             </Breadcrumbs>
           </motion.div>
 

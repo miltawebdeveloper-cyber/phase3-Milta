@@ -219,28 +219,14 @@ const FaqSection = () => {
             }}
           >
             {/* First Column - 600px */}
-            <Grid 
-              item 
-              xs={12} 
-              md={6}
-              sx={{
-                maxWidth: { md: "590px" },
-                width: "100%",
-              }}
-            >
+            <Grid size={{ xs: 12, md: 6 }} sx={{ maxWidth: { md: "590px" },
+                width: "100%" }}>
               {renderFaqColumn(firstColumn, 0)}
             </Grid>
 
             {/* Second Column - 600px */}
-            <Grid 
-              item 
-              xs={12} 
-              md={6}
-              sx={{
-                maxWidth: { md: "610px" },
-                width: "100%",
-              }}
-            >
+            <Grid size={{ xs: 12, md: 6 }} sx={{ maxWidth: { md: "610px" },
+                width: "100%" }}>
               {renderFaqColumn(secondColumn, midpoint)}
             </Grid>
           </Grid>

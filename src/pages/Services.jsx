@@ -22,6 +22,7 @@ import useFullSEO from '../utils/useFullSEO';
 
 const CTASection = lazy(() => import('../components/homeComp/CTASection'));
 import Footer from '../components/Footer';
+import CurrentCrumb from '../components/CurrentCrumb';
 
 const SERVICES = [
   { icon: <Receipt />,       title: 'Book Keeping',          description: 'Streamlined bookkeeping services that keep your financial records organized and compliant.',            link: '/us/services/bookkeeping-company-in-the-usa/' },
@@ -139,9 +140,9 @@ const Services = () => {
                   <HomeIcon sx={{ fontSize: 18 }} />
                   <Typography variant="body2" sx={{ fontWeight: 500 }}>Home</Typography>
                 </Link>
-                <Typography variant="body2" sx={{ color: alpha('#ffffff', 0.9), fontWeight: 600, letterSpacing: '0.02em' }}>
+                <CurrentCrumb variant="body2" sx={{ color: alpha('#ffffff', 0.9), fontWeight: 600, letterSpacing: '0.02em' }}>
                   Services
-                </Typography>
+                </CurrentCrumb>
               </Breadcrumbs>
             </motion.div>
           </Box>

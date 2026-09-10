@@ -5,6 +5,7 @@ import { useTheme, alpha } from '@mui/material/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link as RouterLink } from 'react-router-dom';
+import CurrentCrumb from '../CurrentCrumb';
 
 const HeroModern = ({ title = "About Us", breadcrumbPage = "About Us" }) => {
   const theme = useTheme();
@@ -154,7 +155,7 @@ const HeroModern = ({ title = "About Us", breadcrumbPage = "About Us" }) => {
                 <HomeIcon sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ fontWeight: 500 }}>Home</Typography>
               </Link>
-              <Typography
+              <CurrentCrumb
                 variant="body2"
                 sx={{
                   color: alpha('#ffffff', 0.9),
@@ -162,7 +163,7 @@ const HeroModern = ({ title = "About Us", breadcrumbPage = "About Us" }) => {
                 }}
               >
                 {breadcrumbPage}
-              </Typography>
+              </CurrentCrumb>
             </Breadcrumbs>
           </motion.div>
         </Box>

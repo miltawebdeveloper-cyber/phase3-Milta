@@ -104,17 +104,9 @@ const FeatureHighlightSection = () => {
         </Box>
 
         {/* ================= FEATURE CARDS ================= */}
-        <Grid container spacing={4} justifyContent="center">
+        <Grid container spacing={4} sx={{ justifyContent: "center" }}>
           {features.map((item, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={index}
-              display="flex"
-              justifyContent="center"
-            >
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: "flex", justifyContent: "center" }}>
               <Box
                 sx={{
                   backgroundColor: "#2b6d2a",

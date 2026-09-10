@@ -1,0 +1,93 @@
+{
+  "service": "Digital Marketing",
+  "breadcrumb": "Digital Marketing Agency in",
+  "sections": [
+    {
+      "key": "intro",
+      "kind": "prose",
+      "overline": "",
+      "bg": "",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "AI-Driven Marketing & Advertising to Accelerate Your",
+      "ctaLabel": "Request a Proposal Today!"
+    },
+    {
+      "key": "prose",
+      "kind": "prose",
+      "overline": "",
+      "bg": "paper",
+      "slots": 2,
+      "icons": [],
+      "exampleHeading": "Engage Your Audience with Precision"
+    },
+    {
+      "key": "whyEssential",
+      "kind": "checklist",
+      "overline": "",
+      "bg": "default",
+      "slots": 3,
+      "icons": [],
+      "exampleHeading": "Why Partner",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 8,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Milta Digital Marketing Services in",
+      "columns": 2
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "",
+      "slots": 6,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Choose Milta as Your Digital Marketing Service in",
+      "columns": 3
+    },
+    {
+      "key": "cardGroups",
+      "kind": "cards",
+      "overline": "",
+      "bg": "paper",
+      "slots": 5,
+      "icons": [
+        "",
+        "",
+        "",
+        "",
+        ""
+      ],
+      "exampleHeading": "Why Select Milta as Your Partner in",
+      "columns": 3
+    }
+  ],
+  "faqs": 5,
+  "derivedFrom": {
+    "pages": 27,
+    "matching": 13,
+    "example": "/us/services/best-digital-marketing-agency-in-arizona/"
+  }
+}

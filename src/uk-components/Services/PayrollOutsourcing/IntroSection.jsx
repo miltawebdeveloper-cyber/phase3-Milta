@@ -19,10 +19,10 @@ const PayrollIntroSection = () => {
           px: { xs: "16px", md: "24px" },
         }}
       >
-        <Grid container spacing={8} alignItems="center">
+        <Grid container spacing={8} sx={{ alignItems: "center" }}>
           
           {/* ================= LEFT SIDE (TEXT) ================= */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Box sx={{ maxWidth: 620 }}>
 
               {/* Section Label */}
@@ -148,7 +148,7 @@ const PayrollIntroSection = () => {
           </Grid>
 
           {/* ================= RIGHT SIDE (IMAGE) ================= */}
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Box
               component="img"
               src={payrollImage}
