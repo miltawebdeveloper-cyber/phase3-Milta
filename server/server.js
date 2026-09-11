@@ -560,7 +560,8 @@ if (fs.existsSync(distPath)) {
 
   // SPA fallback — any route not matched above returns index.html so
   // React Router can handle it client-side.
-  app.get("*", (_req, res) => {
+  // Note: Express 5 dropped the bare '*' wildcard — use a regex instead.
+  app.get(/(.*)/, (_req, res) => {
     res.sendFile(path.join(distPath, "index.html"));
   });
 
