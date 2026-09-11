@@ -1,5 +1,6 @@
 import React from "react";
-import SidebarMenu from "../../sidebarMenu";
+import SidebarMenu from "../SidebarMenu";
+
 const BookkeepingSidebar = () => {
   const menuItems = [
      { label: "Overview", id: "overview" },
