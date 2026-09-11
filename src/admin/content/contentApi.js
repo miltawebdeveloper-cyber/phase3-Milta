@@ -4,9 +4,7 @@
 // storage and database can be replaced without touching a component.
 import { getToken, clearToken, AuthError } from "../api";
 
-const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? "https://phase3-milta.onrender.com/api" : "/api");
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 const qs = (params) => {
   const search = new URLSearchParams();

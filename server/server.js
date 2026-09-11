@@ -541,6 +541,35 @@ app.post("/api/apply", upload.single("resume"), async (req, res) => {
 });
 
 /* =========================================
+   STATIC FRONTEND (single-service deploy)
+   =========================================
+   When the frontend and backend are deployed as one Render service, the built
+   React app lives in ../dist (relative to this file in server/). Express serves
+   those files for every non-API request so React Router handles client-side
+   navigation. The /api routes above are matched first, so the API is unaffected.
+   ========================================= */
+
+const path = require("path");
+const fs = require("fs");
+
+const distPath = path.join(__dirname, "..", "dist");
+
+if (fs.existsSync(distPath)) {
+  // Serve static assets (JS, CSS, images, etc.)
+  app.use(express.static(distPath));
+
+  // SPA fallback — any route not matched above returns index.html so
+  // React Router can handle it client-side.
+  app.get("*", (_req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+
+  console.log(`Serving static frontend from ${distPath}`);
+} else {
+  console.log("No dist/ folder found — running in API-only mode.");
+}
+
+/* =========================================
    SERVER START
    ========================================= */
 

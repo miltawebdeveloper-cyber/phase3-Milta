@@ -4,9 +4,7 @@
 // lazily-loaded /admin route — it must never end up in the graph of a public
 // page. See src/api/client.js for the same reasoning applied to Supabase.
 
-const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://phase3-milta.onrender.com/api' : '/api');
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 const TOKEN_KEY = 'milta.admin.token';
 const EXPIRY_KEY = 'milta.admin.expires';

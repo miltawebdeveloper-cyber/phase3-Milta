@@ -11,9 +11,7 @@
 // Set VITE_API_URL to point dev at a deployed backend when the local server
 // itself can't reach Supabase (e.g. behind the same network filter).
 
-const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://phase3-milta.onrender.com/api' : '/api');
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 // Forward only the params the backend understands, and only when they carry a
 // value — an undefined/empty value would otherwise serialise as "undefined".

@@ -76,6 +76,10 @@ export default defineConfig({
     host: '0.0.0.0',
     port: parseInt(process.env.PORT) || 4173,
     strictPort: true,
+    // Render (and any reverse proxy) forwards requests with the public hostname
+    // as the Host header. Vite preview blocks unknown hostnames by default,
+    // which causes "Blocked request" on every page load in production.
+    allowedHosts: 'all',
   },
   server: {
     port: 3000,

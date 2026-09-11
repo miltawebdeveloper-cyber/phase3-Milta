@@ -11,9 +11,7 @@
 // (vite.config.js); prod falls back to the Render backend. Set VITE_API_URL to
 // point dev at a deployed backend when the local one can't reach Supabase.
 
-const API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://phase3-milta.onrender.com/api' : '/api');
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export const getPageByUrl = async (url) => {
   if (!url) return null;
