@@ -1,4 +1,4 @@
-import SidebarMenu from "../SidebarMenu";
+import SidebarMenu from "../../sidebarMenu";
 
 const BookkeepingSidebar = () => {
   const menuItems = [

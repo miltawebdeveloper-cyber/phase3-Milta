@@ -1,5 +1,5 @@
 import React from "react";
-import SidebarMenu from "../sidebarMenu";
+import SidebarMenu from "../../sidebarMenu";
 
 const BookkeepingSidebar = () => {
   const menuItems = [

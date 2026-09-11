@@ -2,6 +2,7 @@
 import React from "react";
 import { Box, Typography, List, ListItemButton, ListItemText } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import SidebarMenu from "../../sidebarMenu";
 
 // Sidebar items
 const sidebarItems = [
