@@ -33,7 +33,7 @@
   "dev": "vite",
   "dev:web": "vite",
   "dev:api": "npm --prefix server run dev",
-  "start": "vite",
+  "start": "vite preview",
   "build": "vite build",
   "build:nossg": "vite build",
   "prerender": "node scripts/prerender.mjs",

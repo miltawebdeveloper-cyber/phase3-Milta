@@ -69,6 +69,14 @@ export default defineConfig({
       },
     },
   },
+  preview: {
+    // Render sets PORT automatically and requires the server to bind on 0.0.0.0
+    // so it can detect the open port. Without this, vite preview defaults to
+    // localhost:4173 which Render never sees, triggering the restart loop.
+    host: '0.0.0.0',
+    port: parseInt(process.env.PORT) || 4173,
+    strictPort: true,
+  },
   server: {
     port: 3000,
     open: true,
