@@ -13,7 +13,7 @@
 
 const API_BASE =
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? 'https://milta-website.onrender.com/api' : '/api');
+  (import.meta.env.PROD ? 'https://phase3-milta.onrender.com/api' : '/api');
 
 // Forward only the params the backend understands, and only when they carry a
 // value — an undefined/empty value would otherwise serialise as "undefined".

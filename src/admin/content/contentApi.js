@@ -6,7 +6,7 @@ import { getToken, clearToken, AuthError } from "../api";
 
 const API_BASE =
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD ? "https://milta-website.onrender.com/api" : "/api");
+  (import.meta.env.PROD ? "https://phase3-milta.onrender.com/api" : "/api");
 
 const qs = (params) => {
   const search = new URLSearchParams();
