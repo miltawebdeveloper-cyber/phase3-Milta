@@ -22,7 +22,7 @@
       "exampleHeading": "How Can We Support"
     },
     {
-      "key": "cardGroups",
+      "key": "whyOutsource",
       "kind": "prose",
       "overline": "",
       "bg": "",
@@ -31,7 +31,7 @@
       "exampleHeading": "Why Outsource Your"
     },
     {
-      "key": "cardGroups",
+      "key": "smallBusinessServices",
       "kind": "cards",
       "overline": "",
       "bg": "paper",
@@ -47,7 +47,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "coreServices",
       "kind": "cards",
       "overline": "",
       "bg": "",
@@ -64,7 +64,7 @@
       "columns": 2
     },
     {
-      "key": "cardGroups",
+      "key": "whyChooseMilta",
       "kind": "cards",
       "overline": "",
       "bg": "paper",
@@ -81,7 +81,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "specializedServices",
       "kind": "cards",
       "overline": "",
       "bg": "",
@@ -95,7 +95,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "howMiltaSupports",
       "kind": "cards",
       "overline": "",
       "bg": "paper",

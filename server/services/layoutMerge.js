@@ -186,7 +186,7 @@ const STOP = new Set(["the", "a", "an", "and", "of", "to", "in", "for", "on", "w
 
 const words = (s) => normalise(s).split(" ").filter((w) => w && !STOP.has(w));
 
-// Does this document block belong in this template slot?
+// How confidently does this document block belong in this template slot?
 //
 // Not string equality: a Bookkeeping document writes "Industries We Serve in
 // Delaware" where the template's example says "Industries We Serve for
@@ -194,15 +194,15 @@ const words = (s) => normalise(s).split(" ").filter((w) => w && !STOP.has(w));
 // will ever say so. Two thirds of the shorter heading's meaningful words in
 // common is enough to be confident, and a wrong guess only costs an eyebrow —
 // the renderer is chosen by shape, which is checked separately.
-function sameHeading(target, block) {
-  if (!target.example) return false;
+function headingScore(target, block) {
+  if (!target.example) return 0;
   const a = words(target.example);
   const b = words(headingOf(block.node));
-  if (!a.length || !b.length) return false;
+  if (!a.length || !b.length) return 0;
 
   const setA = new Set(a);
   const shared = b.filter((w) => setA.has(w)).length;
-  return shared / Math.min(a.length, b.length) >= 0.66;
+  return shared / Math.min(a.length, b.length);
 }
 
 const PRESENTATION = ["overline", "bg", "columns", "placement", "image", "imageAlt", "ctaLabel"];
@@ -256,19 +256,28 @@ function applyDocumentStructure(existing, incoming, { template = null, state = "
   // as a section it became a heading with nothing underneath it, and the page
   // showed the sentence twice — once as a stray heading, once on the button.
   //
-  // Only a block with NO content of its own is dropped, so a real section that
-  // happens to be titled like a call to action keeps its copy.
-  const ctaLabels = new Set(
-    (template?.sections || []).map((s) => normalise(s.ctaLabel)).filter(Boolean),
-  );
+  // A contentless block — no rows, items, paragraphs or subtitle — is dropped
+  // outright. It used to survive when its heading echoed the template's own
+  // ctaLabel (a button sentence a document repeats as a stray heading, with
+  // nothing under it); it is dropped unconditionally now, because the same
+  // emptiness causes a second, more damaging failure `headingScore` below has
+  // no way to guard against on its own: that heuristic only needs two-thirds
+  // of a SHORT heading's words to agree, and a bare, empty label ahead of the
+  // document's real content can pass that bar by accident. The Wisconsin
+  // Payroll document has exactly this — a stray "Explore Payroll Services"
+  // <h1> with no body of its own, sitting right before "Payroll Management
+  // Services in Wisconsin" — and "payroll" + "services" alone were enough to
+  // match IT to the template's `intro` slot first, stealing that slot's
+  // heading match and bumping the page's real intro paragraphs down into
+  // `prose` instead. A heading with nothing under it has nothing a page could
+  // lose by dropping it, and only by dropping it can the real block behind it
+  // win the match it should.
   const isContentless = (n) => !n?.rows
     && !(n?.items || []).length
     && !(n?.paragraphs || []).length
     && !String(n?.subtitle || "").trim();
 
-  const blocks = blocksOf(incoming).filter(
-    (b) => !(isContentless(b.node) && ctaLabels.has(headingOf(b.node))),
-  );
+  const blocks = blocksOf(incoming).filter((b) => !isContentless(b.node));
 
   // The banner takes the document's words and the page's furniture. A CTA label
   // and a breadcrumb are chrome the document has no way to express, so losing
@@ -330,10 +339,33 @@ function applyDocumentStructure(existing, incoming, { template = null, state = "
   const targetFor = new Array(blocks.length).fill(-1);
   const claimed = new Set();
 
+  // Within the heading pass itself, a slot with a SHORT example (three or
+  // four words is common) can cross the 0.66 bar against more than one
+  // block — an early, loosely-related block and the block that actually
+  // owns that heading later in the document. Scanning block by block and
+  // taking the first target each one clears the bar against let the early,
+  // weaker match claim the slot before the later, exact match ever got a
+  // turn — a second cascade the two-pass split above does not cover, because
+  // both blocks here DO have a heading opinion; they just disagree on the
+  // same slot. Scoring every (block, target) pair that clears the bar and
+  // assigning strongest-first — regardless of which block came first in the
+  // document — means a slot in genuine contention always goes to whichever
+  // block actually names it best.
+  const candidates = [];
   blocks.forEach((block, bi) => {
-    const at = targets.findIndex((t, i) => !claimed.has(i) && t.kind === block.kind && sameHeading(t, block));
-    if (at !== -1) { targetFor[bi] = at; claimed.add(at); }
+    targets.forEach((t, ti) => {
+      if (t.kind !== block.kind) return;
+      const score = headingScore(t, block);
+      if (score >= 0.66) candidates.push({ bi, ti, score });
+    });
   });
+  candidates.sort((a, b) => b.score - a.score);
+  for (const { bi, ti } of candidates) {
+    if (targetFor[bi] !== -1 || claimed.has(ti)) continue;
+    targetFor[bi] = ti;
+    claimed.add(ti);
+  }
+
   blocks.forEach((block, bi) => {
     if (targetFor[bi] !== -1) return;
     const at = targets.findIndex((t, i) => !claimed.has(i) && t.kind === block.kind);

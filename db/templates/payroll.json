@@ -22,7 +22,7 @@
       "exampleHeading": "End-to-End Payroll Management"
     },
     {
-      "key": "cardGroups",
+      "key": "whatWeHandle",
       "kind": "checklist",
       "overline": "",
       "bg": "",
@@ -32,7 +32,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "howItWorks",
       "kind": "cards",
       "overline": "",
       "bg": "paper",
@@ -47,7 +47,7 @@
       "columns": 4
     },
     {
-      "key": "cardGroups",
+      "key": "whyEssential",
       "kind": "cards",
       "overline": "",
       "bg": "",
@@ -63,7 +63,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "whyChoose",
       "kind": "cards",
       "overline": "",
       "bg": "paper",
@@ -78,7 +78,7 @@
       "columns": 2
     },
     {
-      "key": "cardGroups",
+      "key": "rightFit",
       "kind": "checklist",
       "overline": "",
       "bg": "",
@@ -88,7 +88,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "keyAdvantages",
       "kind": "cards",
       "overline": "",
       "bg": "paper",
@@ -103,7 +103,7 @@
       "columns": 2
     },
     {
-      "key": "cardGroups",
+      "key": "bestPractices",
       "kind": "checklist",
       "overline": "",
       "bg": "",
@@ -113,7 +113,7 @@
       "columns": 4
     },
     {
-      "key": "cardGroups",
+      "key": "dataSecurity",
       "kind": "checklist",
       "overline": "",
       "bg": "paper",
@@ -123,7 +123,7 @@
       "columns": 3
     },
     {
-      "key": "cardGroups",
+      "key": "servicesByMilta",
       "kind": "cards",
       "overline": "",
       "bg": "",

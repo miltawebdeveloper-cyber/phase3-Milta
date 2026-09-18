@@ -1,11 +1,19 @@
 // Resolves hostnames that are DNS-poisoned / hijacked by local Indian ISPs (such as ACT Fibernet)
 // intercepting port 53 UDP traffic and redirecting *.supabase.co to 106.51.113.17.
-// By intercepting dns.lookup and asynchronously resolving directly to Cloudflare edge IP 104.18.38.10,
-// Node.js processes (fetch, undici, @supabase/supabase-js, https) connect seamlessly to Supabase.
+// By intercepting dns.lookup and asynchronously resolving directly to known-good Cloudflare edge
+// IPs, Node.js processes (fetch, undici, @supabase/supabase-js, https) connect seamlessly to
+// Supabase.
+//
+// More than one IP is listed deliberately. A single hardcoded address is a single point of
+// failure — that edge node occasionally refused/timed out the connection, which surfaced as
+// intermittent 500s ("TypeError: fetch failed") on otherwise-working routes. Handing back both
+// addresses lets Node's connection-attempt fallback (Happy Eyeballs, on by default since Node 20)
+// retry the second one when the first misbehaves, the same as a normal DNS answer with multiple
+// A records would.
 
 const dns = require("dns");
 
-const SUPABASE_IP = "104.18.38.10";
+const SUPABASE_IPS = ["104.18.38.10", "172.64.149.246"];
 
 const originalLookup = dns.lookup;
 
@@ -22,8 +30,8 @@ function installDnsBypass() {
 
     if (typeof hostname === "string" && hostname.endsWith(".supabase.co")) {
       const res = options && options.all
-        ? [{ address: SUPABASE_IP, family: 4 }]
-        : SUPABASE_IP;
+        ? SUPABASE_IPS.map((address) => ({ address, family: 4 }))
+        : SUPABASE_IPS[0];
 
       process.nextTick(() => {
         if (options && options.all) {
@@ -41,4 +49,4 @@ function installDnsBypass() {
 
 installDnsBypass();
 
-module.exports = { installDnsBypass, SUPABASE_IP };
+module.exports = { installDnsBypass, SUPABASE_IPS };

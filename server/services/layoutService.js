@@ -1299,13 +1299,31 @@ function toServiceLayout({ html, text }) {
   //   · otherwise — take every consecutive paragraph until the next heading or
   //     non-paragraph, not just one. A document whose banner sits above the
   //     first <h2> without a box still writes two or three sentences in a row.
+  // A subtitle sentence is sometimes styled with the same heading as the title
+  // itself rather than left as a plain paragraph — the Wisconsin Payroll
+  // document's very first line after its <h1> title ("From payroll processing
+  // to employee records…") is itself an <h1>. Read literally that stopped the
+  // loop below before it collected anything, so the banner lost its subtitle
+  // AND that stray heading was left to be counted as a second "section-level"
+  // <h1> alongside the real one further down the document (see levelCounts).
+  // Narrow on purpose: only a heading at the exact same level as the hero's
+  // own title (never deeper, which is a real section), never scaffold or
+  // CTA-shaped (isCta's own line right after this one still gets first look
+  // at a short, action-phrased heading), and only a genuine sentence — ending
+  // in "." the way a title never does, and long enough not to catch one.
+  const looksLikeMisstyledSentence = (b) =>
+    !isScaffold(b.text) && !isCta(b.text) && /\.$/.test(b.text) && b.text.split(/\s+/).length >= 6;
+
   const subtitleIdxs = [];
   for (let i = Math.max(firstHeadingIdx, -1) + 1; i < live.length; i += 1) {
-    if (live[i].tag !== "p" || live[i].level) break;
+    const b = live[i];
+    const isPlainPara = b.tag === "p" && !b.level;
+    const isMisstyledHeading = !heroBoxed && b.level === heroBlock?.level && looksLikeMisstyledSentence(b);
+    if (!isPlainPara && !isMisstyledHeading) break;
     subtitleIdxs.push(i);
     // Non-boxed: keep going until the sequence breaks (next heading / list).
     // Boxed: stop at the first non-boxed paragraph inside the box.
-    if (heroBoxed && !live[i].boxed) break;
+    if (heroBoxed && !b.boxed) break;
   }
   const subtitleTaken = new Set(subtitleIdxs);
 
@@ -1433,8 +1451,21 @@ function toServiceLayout({ html, text }) {
   // a second "level 1" heading next to that stray <h1> — just enough for a
   // one-off outlier to look like it recurs, defeating the very check meant
   // to catch it.
+  // A heading immediately followed by ANOTHER heading at the exact same level
+  // owns no content of its own — a stray label, not a genuine instance of the
+  // document's repeating section rhythm. The Wisconsin Payroll document has
+  // one: "Explore Payroll Services" <h1>, immediately followed by "Payroll
+  // Management Services in Wisconsin" <h1> with nothing between them. Counted
+  // alongside that second, genuine <h1>, it was just enough to make level 1
+  // "recur" twice — passing the bar below and outranking the level the
+  // document actually repeats (<h2>, ten times) for its real sections, so
+  // every <h2> and <h3> in the body folded into one <h1>'s worth of cards.
+  // Two DIFFERENT levels back to back (a section heading straight into its
+  // own first sub-heading, no lead-in sentence) is unaffected — only a peer
+  // at the SAME level counts as "nothing owned."
   const levelCounts = live.reduce((counts, b, i) => {
     if (!b.level || i === firstHeadingIdx || subtitleTaken.has(i) || isScaffold(b.text)) return counts;
+    if (live[i + 1]?.level === b.level) return counts;
     counts[b.level] = (counts[b.level] || 0) + 1;
     return counts;
   }, {});

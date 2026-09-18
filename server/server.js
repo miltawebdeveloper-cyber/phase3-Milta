@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const { createClient } = require("@supabase/supabase-js");
+const { retryQuery } = require("./services/databaseService");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -270,13 +271,15 @@ app.get("/api/pages/by-url", async (req, res) => {
     if (!url) return res.status(400).json({ error: "url is required" });
 
     const bare = String(url).replace(/\/+$/, "");
-    const { data, error } = await supabase
-      .from("pages")
-      .select("*")
-      .in("url", [`${bare}/`, bare])
-      .eq("status", "published")
-      .limit(1)
-      .maybeSingle();
+    const { data, error } = await retryQuery(
+      supabase
+        .from("pages")
+        .select("*")
+        .in("url", [`${bare}/`, bare])
+        .eq("status", "published")
+        .limit(1)
+        .maybeSingle(),
+    );
 
     if (error) throw error;
     res.json(data ?? null);
@@ -293,14 +296,16 @@ app.get("/api/pages/state-service-links", async (_req, res) => {
     const out = [];
     const SIZE = 1000;
     for (let from = 0; ; from += SIZE) {
-      const { data, error } = await supabase
-        .from("pages")
-        .select("state,service,url,meta_title")
-        .eq("status", "published")
-        .eq("kind", "service_state")
-        .not("state", "is", null)
-        .order("state")
-        .range(from, from + SIZE - 1);
+      const { data, error } = await retryQuery(
+        supabase
+          .from("pages")
+          .select("state,service,url,meta_title")
+          .eq("status", "published")
+          .eq("kind", "service_state")
+          .not("state", "is", null)
+          .order("state")
+          .range(from, from + SIZE - 1),
+      );
 
       if (error) throw error;
       out.push(...(data || []));
@@ -320,7 +325,7 @@ app.get("/api/pages/urls", async (req, res) => {
     let query = supabase.from("pages").select("url").eq("status", "published");
     if (kind) query = query.eq("kind", kind);
 
-    const { data, error } = await query.limit(limit ? parseInt(limit, 10) : 50000);
+    const { data, error } = await retryQuery(query.limit(limit ? parseInt(limit, 10) : 50000));
     if (error) throw error;
     res.json((data || []).map((r) => r.url));
   } catch (error) {
@@ -334,10 +339,12 @@ app.get("/api/pages/urls", async (req, res) => {
 // falls back to its hand-written copy instead of blanking.
 app.get("/api/states/descriptions", async (_req, res) => {
   try {
-    const { data, error } = await supabase
-      .from("states")
-      .select("name,slug,description")
-      .eq("status", "active");
+    const { data, error } = await retryQuery(
+      supabase
+        .from("states")
+        .select("name,slug,description")
+        .eq("status", "active"),
+    );
 
     if (error) throw error;
 

@@ -1,40 +1,46 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // THE CPA SERVICE TEMPLATE
 //
-// Reference page (the image this reproduces):
+// Reference page (the image this reproduces, pixel for pixel):
 //   https://www.miltafs.com/us/services/best-cpa-services-for-small-businesses-in-the-arizona/
 //
-//    1. Banner                 hero          dark band, one <h1>
-//    2. Intro + image           intro         copy left · photo right · stat figures
-//    3–N. Every other block, IN THE ORDER THE DOCUMENT WROTE THEM
-//    +  FAQ                     faqs          accordion
-//    +  The Next Step / Footer                shared site chrome
+// This is a FIXED layout, the same way ../Bookkeeping is: the section list
+// below never changes — not when a different state's document is uploaded,
+// not when the document is short. Every CPA page in every state is drawn by
+// this one file; only the words inside each section change.
 //
-// WHY THIS DRIVES OFF content.order, NOT FIXED KEYS
-//   db/templates/cpa.json shapes an upload into fixed KEYS — hero, intro,
-//   prose, cardGroups[], faqs — matching each document block to a template
-//   slot by heading, falling back to slot POSITION when no heading matches
-//   (server/services/layoutMerge.js). That fallback is reliable for a document
-//   whose sections line up with the reference page one-for-one; it is NOT
-//   reliable for a document that adds a section the template never
-//   anticipated. A CPA document that opens with an extra heading before "How
-//   Can We Support Your Business?" — this one does, "Transform Your Business
-//   Finances with the Best CPA Services in {state}" — pushes the array
-//   position every block after it would have claimed down by one, so reading
-//   `cardGroups` by raw array index renders that extra heading LAST instead of
-//   where it actually sits, second in the document.
+//    1. Banner              hero                    dark band, one <h1>
+//    2. Intro + image        intro                  copy left · photo right · stat figures
+//    3. Support prose        prose                  "How Can We Support Your Business?"
+//    4. Why outsource        whyOutsource            prose, "Why Outsource Your CPA Services?"
+//    5. Small-business svcs  smallBusinessServices   5 cards, 3 cols
+//    6. Core services        coreServices            6 cards, 2 cols
+//    7. Why choose Milta     whyChooseMilta          6 cards, 3 cols
+//    8. Specialized services specializedServices     3 cards, 3 cols
+//    9. How Milta supports   howMiltaSupports        5 cards, 3 cols
+//    +  FAQ                  faqs                    accordion
+//    +  The Next Step / Footer                       shared site chrome
 //
-//   `content.order` sidesteps this entirely. It is layoutMerge's own record of
-//   the document's real sequence — built by walking the document's blocks in
-//   the order they were written and noting where EACH ONE landed, whichever
-//   key it ended up under. Reading it back, instead of trusting `cardGroups[0]`
-//   to always mean "the first service block", means a block keeps its true
-//   position even when an unanticipated section shifted everything after it.
+// HOW CONTENT LANDS HERE
+//   A document uploaded through Milta CMS is shaped by db/templates/cpa.json
+//   (server/services/serviceTemplates.js + layoutMerge.js) into a `content`
+//   object with exactly these keys — one per section above, same as
+//   Bookkeeping's whyEssential/solutions/industries. This file reads each key
+//   straight into its section, in this fixed order — no content.order, no
+//   per-render sequencing. Nothing to wire per upload.
 //
-// CPA has no numbered sub-sections of its own — every block here is a peer,
-// top-level section, unlike Tax's "1." / "2." / "3." / "4." nesting. So this
-// file's body walk has no grouping step: it renders each resolved node, in
-// document order, as its own standalone section.
+// UNTIL THIS FILE'S PREVIOUS REVISION, CPA's 6 middle sections shared ONE
+// template key ("cardGroups"), read back here via content.order the same way
+// ../Payroll used to (see that file's own header for the full case for why
+// that was necessary there). CPA's actual stored pages — checked across all
+// 5 live rows before this rewrite — show none of the shape mismatches
+// Payroll's reference document produces: no collapsed cards, no heading that
+// lands under the wrong key. So this file stays as plain as Bookkeeping's:
+// fixed keys, no recovery machinery. If a future upload ever does land
+// something in the wrong place, reuniteEmptySections below (a lighter
+// version of what Payroll needed) catches a stray heading-only or
+// items-only block left in the `cardGroups` overflow; anything else is the
+// normal CMS section-editor fix, same as any other service.
 //
 // THE PIXELS come from ../../_ServiceLayout, imported not re-drawn. What THIS
 // file owns is the order and the CPA photograph.
@@ -84,32 +90,66 @@ function resolveHero(content, { fallbackTitle, fallbackDescription, state }) {
   };
 }
 
-/* ── Reading the body in document order ──────────────────────────────────── */
+/* ── A lighter safety net than Payroll's ─────────────────────────────────────
+ *
+ * CPA's real, live rows show no shape mismatches, so there is no collapsed-
+ * card recovery here. What CAN still happen — the general "a document adds a
+ * block the template never anticipated" case every service already handles
+ * by keeping it, unlabelled, in the `cardGroups` overflow (see Bookkeeping's
+ * own header) — is a heading-only or items-only stray that plainly belongs to
+ * one of the 6 named sections below but missed being matched to it. Caught by
+ * heading here, the same way, just without the shape-detection Payroll's
+ * document specifically requires.
+ */
+const SECTION_EXAMPLE = {
+  whyOutsource: "why outsource your", smallBusinessServices: "our cpa services for small",
+  coreServices: "our core cpa services in", whyChooseMilta: "why choose milta for cpa services in",
+  specializedServices: "specialized cpa services for", howMiltaSupports: "how milta supports",
+};
 
-// "cardGroups.7" -> content.cardGroups[7]; "prose" -> content.prose.
-function resolveNode(content, id) {
-  const m = /^([A-Za-z]+)\.(\d+)$/.exec(id);
-  if (m) return content[m[1]]?.[Number(m[2])];
-  return content[id];
+const STOP = new Set(["the", "a", "an", "and", "of", "to", "in", "for", "on", "with", "our", "your", "we", "us", "is", "are"]);
+const normaliseText = (s) => String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const words = (s) => normaliseText(s).split(" ").filter((w) => w && !STOP.has(w));
+const headingOf = (n) => normaliseText([n?.titleLead, n?.highlight].filter(Boolean).join(" "));
+function sameHeading(example, node) {
+  const a = words(example);
+  const b = words(headingOf(node));
+  if (!a.length || !b.length) return false;
+  const setA = new Set(a);
+  return b.filter((w) => setA.has(w)).length / Math.min(a.length, b.length) >= 0.66;
 }
 
-// A row saved before content.order existed (or built by hand) has none. This
-// reconstructs the old fixed sequence so such a row still renders in full.
-function fallbackOrder(content) {
-  const order = ["prose"];
-  toArray(content.cardGroups).forEach((_, i) => order.push(`cardGroups.${i}`));
-  return order;
-}
+const hasRealItem = (item) => (typeof item === "string" ? item.trim().length > 0
+  : !!item && (String(item.title || "").trim() || String(item.desc || "").trim() || (item.bullets || []).length));
+const hasRealContent = (node) => !!node && (headingOf(node)
+  || (node.items || []).some(hasRealItem) || (node.paragraphs || []).some((t) => String(t || "").trim()));
 
-// `hero`, `intro`, `faqs` and `faqsHeading` are rendered by dedicated steps
-// below and never re-enter the generic body walk.
-const SPECIAL_IDS = new Set(["hero", "intro", "faqs", "faqsHeading"]);
+function reuniteEmptySections(rawC) {
+  const out = { ...rawC };
+  const overflow = toArray(out.cardGroups);
+  const used = new Set();
+  const emptyTargets = Object.keys(SECTION_EXAMPLE).filter((key) => !hasRealContent(out[key]));
 
-function bodyOrder(content) {
-  const order = Array.isArray(content.order) && content.order.length
-    ? content.order
-    : fallbackOrder(content);
-  return order.filter((id) => !SPECIAL_IDS.has(id));
+  for (const key of emptyTargets) {
+    const headingSource = overflow.findIndex((node, i) => !used.has(i) && !(node.items || []).some(hasRealItem)
+      && headingOf(node) && sameHeading(SECTION_EXAMPLE[key], node));
+    const itemsSource = overflow.findIndex((node, i) => !used.has(i) && i !== headingSource
+      && (node.items || []).some(hasRealItem) && sameHeading(SECTION_EXAMPLE[key], node));
+    if (headingSource === -1 && itemsSource === -1) continue;
+
+    const h = headingSource !== -1 ? overflow[headingSource] : null;
+    const it = itemsSource !== -1 ? overflow[itemsSource] : null;
+    out[key] = {
+      titleLead: h?.titleLead ?? it?.titleLead, highlight: h?.highlight ?? it?.highlight,
+      subtitle: (h?.paragraphs || []).filter((t) => String(t || "").trim()).join(" ") || it?.subtitle,
+      bg: it?.bg ?? h?.bg, columns: it?.columns, items: it?.items, paragraphs: it ? undefined : h?.paragraphs,
+    };
+    if (headingSource !== -1) used.add(headingSource);
+    if (itemsSource !== -1) used.add(itemsSource);
+  }
+
+  if (used.size) out.cardGroups = overflow.filter((_, i) => !used.has(i));
+  return out;
 }
 
 // CPA's cards show one short description each, matching the reference image —
@@ -126,11 +166,10 @@ const stripBullets = (item) => {
   return rest;
 };
 
-/* ── Rendering one node by its shape ─────────────────────────────────────── */
-// The SHAPE of a node picks its renderer — paragraphs is prose, string items a
-// checklist, object items a card grid, rows a table — the same dispatch
-// ../../_ServiceLayout.ServiceLayout uses for its own ordered lists. Each node
-// keeps its own authored band and column count.
+// Dispatch a node to the renderer its own shape calls for — the same
+// shape-first dispatch Bookkeeping uses for its own `cardGroups` array,
+// reused here for the small overflow list (content a document wrote that
+// matched no named section — kept, never dropped).
 function renderNode(node, key) {
   const g = asObject(node);
   if (Array.isArray(g.rows)) return <ComparisonTable key={key} data={g} />;
@@ -138,6 +177,12 @@ function renderNode(node, key) {
   if (typeof g.items?.[0] === "string") return <Checklist key={key} data={g} />;
   const items = Array.isArray(g.items) ? g.items.map(stripBullets) : g.items;
   return <CardGroup key={key} data={{ ...g, items }} />;
+}
+
+function Cards({ data }) {
+  const g = asObject(data);
+  const items = Array.isArray(g.items) ? g.items.map(stripBullets) : g.items;
+  return <CardGroup data={{ ...g, items }} />;
 }
 
 /**
@@ -159,8 +204,9 @@ export default function CPATemplate({
 }) {
   useFullSEO(preview ? null : seo);
 
-  const c =
+  const rawC =
     content && typeof content === "object" && !Array.isArray(content) ? content : rest;
+  const c = reuniteEmptySections(rawC);
 
   const hero = resolveHero(c, { fallbackTitle, fallbackDescription, state });
 
@@ -178,12 +224,33 @@ export default function CPATemplate({
         fallbackAlt="CPA services"
       />
 
-      {/* 3+ — Everything else, in the order the document wrote it. See the file
-          header for why this reads content.order rather than trusting which
-          key each block landed under. */}
-      {bodyOrder(c).map((id, i) => renderNode(resolveNode(c, id), i))}
+      {/* Content a document wrote that matched no named section below — kept,
+          never dropped, the same way Bookkeeping keeps anything extra in its
+          own `cardGroups` array. Empty on every page today. */}
+      {toArray(c.cardGroups).map((raw, i) => renderNode(raw, `extra-${i}`))}
 
-      {/* FAQ. Accordion. */}
+      {/* 3 — "How Can We Support Your Business?". */}
+      <Prose data={{ ...asObject(c.prose), bg: asObject(c.prose).bg || "paper" }} />
+
+      {/* 4 — "Why Outsource Your CPA Services?". */}
+      <Prose data={{ ...asObject(c.whyOutsource), bg: asObject(c.whyOutsource).bg || "" }} />
+
+      {/* 5 — "Our CPA Services for Small Business Include:". 5 cards, 3 cols. */}
+      <Cards data={{ ...asObject(c.smallBusinessServices), columns: asObject(c.smallBusinessServices).columns || 3 }} />
+
+      {/* 6 — "Our Core CPA Services in {state}". 6 cards, 2 cols. */}
+      <Cards data={{ ...asObject(c.coreServices), columns: asObject(c.coreServices).columns || 2 }} />
+
+      {/* 7 — "Why Choose Milta for CPA Services in {state}?". 6 cards, 3 cols. */}
+      <Cards data={{ ...asObject(c.whyChooseMilta), columns: asObject(c.whyChooseMilta).columns || 3 }} />
+
+      {/* 8 — "Specialized CPA Services for Small Businesses". 3 cards, 3 cols. */}
+      <Cards data={{ ...asObject(c.specializedServices), columns: asObject(c.specializedServices).columns || 3 }} />
+
+      {/* 9 — "How Milta Supports CPA Firms near me". 5 cards, 3 cols. */}
+      <Cards data={{ ...asObject(c.howMiltaSupports), columns: asObject(c.howMiltaSupports).columns || 3 }} />
+
+      {/* + — FAQ. */}
       <FAQSection faqs={toArray(c.faqs)} heading={c.faqsHeading} />
 
       {!preview && (

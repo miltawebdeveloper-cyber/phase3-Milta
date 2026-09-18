@@ -1,59 +1,56 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // THE PAYROLL SERVICE TEMPLATE
 //
-// Reference page (the image this reproduces):
+// Reference page (the image this reproduces, pixel for pixel):
 //   https://www.miltafs.com/us/services/payroll-management-services-in-the-arizona/
 //
-//    1. Banner                 hero          dark band, one <h1>
-//    2. Intro + image           intro         copy left · photo right · stat figures
-//    3–N. Every other block, IN THE ORDER THE DOCUMENT WROTE THEM
-//    +  FAQ                     faqs          accordion
-//    +  The Next Step / Footer                shared site chrome
+// This is a FIXED layout, the same way ../Bookkeeping is: the section list
+// below never changes — not when a different state's document is uploaded,
+// not when the document is short. Every Payroll page in every state is drawn
+// by this one file; only the words inside each section change.
 //
-// WHY THIS DRIVES OFF content.order, NOT FIXED KEYS
-//   Same reasoning as ../Tax, ../CPA, ../DataEntry, ../DigitalMarketing and
-//   ../FinancialController (read their file headers for the full case):
-//   reading `content.order` — layoutMerge's own record of the document's real
-//   sequence — means a block keeps its true position even when it lands under
-//   a different KEY than its heading would suggest. That happens more than
-//   once in this service's own reference document: "Payroll Management
-//   Services by Milta Accounting" (no cards of its own) is the only
-//   prose-shaped block left once "End-to-End Payroll Management" has already
-//   claimed the template's one `prose` slot, so it wins that slot by KIND
-//   instead — landing under `content.prose` despite sitting two-thirds of the
-//   way down the page. `order` still records it exactly where the document
-//   wrote it, which is all this file ever reads.
+//    1. Banner              hero            dark band, one <h1>
+//    2. Intro + image        intro          copy left · photo right · stat figures
+//    3. End-to-End prose     prose          intro paragraph for the section below
+//    4. What We Handle       whatWeHandle   checklist, 5 items
+//    5. How It Works         howItWorks     4 cards, one highlighted (see below)
+//    6. Why Essential        whyEssential   5 cards
+//    7. Why Choose           whyChoose      4 cards, 2 columns
+//    8. Right Fit            rightFit       checklist, 5 items
+//    9. Key Advantages       keyAdvantages  4 cards, 2 columns
+//   10. Best Practices       bestPractices  checklist, 8 items, 4 columns
+//   11. Data Security        dataSecurity   checklist, 5 items
+//   12. Services by Milta    servicesByMilta 8 cards, 4 columns
+//   13. Closing              closing        paper band, CTA
+//   +   FAQ                  faqs           accordion
+//   +   The Next Step / Footer               shared site chrome
 //
-// TWO SHAPES THIS DOCUMENT NEEDS RECOVERING
-//   1. A section heading followed by ONE more sub-heading and ITS OWN bullet
-//      list — "What We Handle for Your Business", "Key Benefits of
-//      Professional Payroll Management", "Key Benefits of Outsourcing
-//      Payroll" — reads, by layoutService's general "sub-heading + list"
-//      rule, as a single card whose `.bullets` holds the whole list. Right
-//      for a heading illustrating one point with supporting facts; wrong
-//      here, where db/templates/payroll.json expects each bullet as its own
-//      checklist item or its own card (the slot counts — 5, 5, 4 — match the
-//      bullet counts exactly, and the reference page draws each bullet in
-//      its own box). `splitCollapsedCard` below turns that one card back
-//      into the section's own intro text plus a second, embedded block
-//      holding the real items — the same "big heading, then a nested
-//      sub-block" shape ../Tax's NestedTaxSection already draws for its
-//      numbered sections, reused here as `SplitSection`.
-//   2. A heading with no cards of its own directly followed by a SECOND
-//      heading that is really just a connecting label — "Payroll Management
-//      Services by Milta Accounting" (a paragraph, no items) into "Our
-//      Payroll Solutions Include:" (the 8 cards). The reference page draws
-//      these as ONE section: the first heading and its paragraph, then the
-//      eight cards directly beneath — the second heading never appears.
-//      `mergeHollowWithItems` folds the pair into one node before rendering.
+// HOW CONTENT LANDS HERE
+//   A document uploaded through Milta CMS is shaped by
+//   db/templates/payroll.json (server/services/serviceTemplates.js +
+//   layoutMerge.js) into a `content` object with exactly these keys — one per
+//   section above, same as Bookkeeping's whyEssential/solutions/industries.
+//   This file reads each key straight into its section. Nothing to wire per
+//   upload.
 //
-// Payroll has no numbered TOP-LEVEL sub-sections of its own — unlike Tax's
-// "1. / 2. / 3. / 4." sections, every heading here is its own section — so
-// this file's body walk has no numbered-parent grouping step.
+// WHY THIS USED TO BE DIFFERENT (AND ISN'T ANYMORE)
+//   Until this file's previous revision, Payroll's 9 middle sections all
+//   shared ONE template key ("cardGroups"), and this component read
+//   content.order to know which array element was which section. That was
+//   needed because the reference document's own structure creates real shape
+//   mismatches during the generic merge — a heading+bullets that parses as
+//   one card instead of a checklist, and a heading that parses separately
+//   from the cards it introduces and can end up under a different section's
+//   key entirely. Every existing Payroll row was migrated once, out of band,
+//   onto this fixed-key shape. normalizePayrollContent below (tested against
+//   a live re-upload of the real reference document, not just the migrated
+//   rows) catches and repairs the same two patterns on every render, so a
+//   FUTURE re-upload that hits them is not left broken until someone opens
+//   the CMS section editor by hand.
 //
-// THE PIXELS come from ../../_ServiceLayout, imported not re-drawn. What THIS
-// file owns is the order, the two shapes recovered above, and the Payroll
-// photograph.
+// THE PIXELS come from ../../_ServiceLayout, imported not re-drawn, except
+// for the one section the reference image draws differently from a plain
+// card grid — see HighlightedCardGroup below.
 // ─────────────────────────────────────────────────────────────────────────────
 import React, { lazy, Suspense } from "react";
 import { Box, Container, Typography } from "@mui/material";
@@ -103,141 +100,246 @@ function resolveHero(content, { fallbackTitle, fallbackDescription, state }) {
   };
 }
 
-/* ── Reading the body in document order ──────────────────────────────────── */
+/* ── Normalising what a document-merge can still get wrong ──────────────────
+ *
+ * The one-time migration fixed every existing Payroll row, but a FUTURE
+ * upload runs through the same generic merge engine (layoutMerge.js, shared
+ * by every service) that produced the two quirks this file used to work
+ * around with content.order. Both are recognisable from shape and heading
+ * alone, so they are caught and repaired here, once, before anything renders
+ * — the fixed fallback layer under the one-time fix, not a replacement for
+ * it, and touching nothing outside this file.
+ *
+ * 1. A section can arrive as ONE card whose `.bullets` holds every real
+ *    point instead of N cards/checklist items — "Why Payroll Management Is
+ *    Essential" as a single narrow box instead of five aligned cards.
+ * 2. A section's real heading can land in the WRONG place — typically under
+ *    `prose`, or as a headless entry in the `cardGroups` overflow — while its
+ *    actual N cards sit correctly under its own key but keep the wrong
+ *    heading ("Our Payroll Solutions Include:" instead of "Payroll
+ *    Management Services by Milta Accounting"). See this file's own history
+ *    for exactly how the generic engine's heading-then-kind matching
+ *    produces this. Recognised by heading, wherever it ends up, and reunited
+ *    with the section it belongs to.
+ */
+const SECTION_KIND = {
+  whatWeHandle: "checklist", howItWorks: "cards", whyEssential: "cards", whyChoose: "cards",
+  rightFit: "checklist", keyAdvantages: "cards", bestPractices: "checklist", dataSecurity: "checklist",
+  servicesByMilta: "cards",
+};
+const SECTION_EXAMPLE = {
+  whatWeHandle: "what we handle for", howItWorks: "how our payroll management",
+  whyEssential: "why payroll management is essential for", whyChoose: "why choose outsourced payroll",
+  rightFit: "is payroll outsourcing the right fit", keyAdvantages: "key advantages of outsourced",
+  bestPractices: "best practices for accurate", dataSecurity: "trusted payroll data security",
+  servicesByMilta: "payroll management services by",
+};
 
-// "cardGroups.7" -> content.cardGroups[7]; "prose" -> content.prose.
-function resolveNode(content, id) {
-  const m = /^([A-Za-z]+)\.(\d+)$/.exec(id);
-  if (m) return content[m[1]]?.[Number(m[2])];
-  return content[id];
+const STOP = new Set(["the", "a", "an", "and", "of", "to", "in", "for", "on", "with", "our", "your", "we", "us", "is", "are"]);
+const normaliseText = (s) => String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+const words = (s) => normaliseText(s).split(" ").filter((w) => w && !STOP.has(w));
+const headingOf = (n) => normaliseText([n?.titleLead, n?.highlight].filter(Boolean).join(" "));
+function sameHeading(example, node) {
+  const a = words(example);
+  const b = words(headingOf(node));
+  if (!a.length || !b.length) return false;
+  const setA = new Set(a);
+  return b.filter((w) => setA.has(w)).length / Math.min(a.length, b.length) >= 0.66;
 }
 
-// A row saved before content.order existed (or built by hand) has none. This
-// reconstructs the old fixed sequence so such a row still renders in full.
-function fallbackOrder(content) {
-  const order = ["prose"];
-  toArray(content.cardGroups).forEach((_, i) => order.push(`cardGroups.${i}`));
-  order.push("closing");
-  return order;
-}
-
-// `hero`, `intro`, `faqs` and `faqsHeading` are rendered by dedicated steps
-// below and never re-enter the generic body walk.
-const SPECIAL_IDS = new Set(["hero", "intro", "faqs", "faqsHeading"]);
-
-function bodyOrder(content) {
-  const order = Array.isArray(content.order) && content.order.length
-    ? content.order
-    : fallbackOrder(content);
-  return order.filter((id) => !SPECIAL_IDS.has(id));
-}
-
-/* ── Recovering a heading + its own list the parser folded into one card ─── */
-//
-// See the file header's item 1. The tell this reads for: a lone item, no
-// sibling cards, and no `desc` text of its own beyond the sub-heading and its
-// bullets — a genuine single card almost always carries descriptive prose
-// along with (or instead of) a bullet list, so a bare title-plus-bullets item
-// is the parser's placeholder for what was really a list of independent
-// points, not a card in its own right.
 const CARD_BULLET = /^(.{2,70}?)(?:\s+[—–]\s*|\s*[—–]\s+|\s+-\s+|:\s+)(.{8,})$/;
-
-// "Employee Satisfaction — Timely and error-free salary payments" -> a card;
-// "Employee timesheet management" (no separator) stays a plain checklist
-// line. Either way nothing here invents words — a bullet that does not split
-// renders exactly as written.
 function splitBullet(text) {
   const m = CARD_BULLET.exec(String(text || "").trim());
   if (!m) return null;
   return { title: m[1].trim().replace(/[:\-—–]\s*$/, ""), desc: m[2].trim() };
 }
 
-function splitCollapsedCard(node) {
-  const g = asObject(node);
-  const items = Array.isArray(g.items) ? g.items : null;
-  const only = items && items.length === 1 && items[0] && typeof items[0] === "object"
-    ? items[0]
-    : null;
-  const bullets = only && Array.isArray(only.bullets)
-    ? only.bullets.filter((b) => String(b || "").trim())
-    : null;
-  if (!bullets || !bullets.length || String(only.desc || "").trim()) return [g];
-
-  const parent = {
-    titleLead: g.titleLead,
-    highlight: g.highlight,
-    paragraphs: [g.subtitle, g.footnote].filter((t) => String(t || "").trim()),
-    bg: g.bg,
-  };
-  const asCards = bullets.every((b) => splitBullet(b));
-  const sub = {
-    titleLead: only.title,
-    bg: g.bg,
-    columns: g.columns,
-    items: asCards
-      ? bullets.map((b) => ({ ...splitBullet(b), icon: only.icon || "" }))
-      : bullets,
-  };
-  return [{ __split: true, parent, sub }];
+// Is this node the collapsed-card shape — one item whose own `.bullets`
+// holds every real point — regardless of which section it landed under?
+// Unlike a heading, a shape is unambiguous: no threshold, no false positive.
+function collapsedBullets(node) {
+  const items = Array.isArray(node?.items) ? node.items : [];
+  const only = items.length === 1 && items[0] && typeof items[0] === "object" ? items[0] : null;
+  const bullets = only && Array.isArray(only.bullets) ? only.bullets.filter((b) => String(b || "").trim()) : null;
+  return bullets && bullets.length ? { only, bullets } : null;
 }
 
-/* ── Recovering two headings the document meant as one section ───────────── */
-//
-// See the file header's item 2. Narrow on purpose: only a heading with a
-// paragraph and NO cards of its own, immediately followed by one that has
-// cards and nothing of its own to say, folds — a heading that already has
-// content of its own is left exactly as parsed.
-function mergeHollowWithItems(nodes) {
-  const out = [];
-  for (let i = 0; i < nodes.length; i += 1) {
-    const g = asObject(nodes[i]);
-    const hasOwnItems = Array.isArray(g.items) && g.items.length > 0;
-    const hasHeading = String(g.titleLead || g.highlight || "").trim();
-    const hasParagraphs = Array.isArray(g.paragraphs) && g.paragraphs.some((t) => String(t || "").trim());
-    const next = asObject(nodes[i + 1]);
-    const nextHasItems = Array.isArray(next.items) && next.items.length > 0;
+// One collapsed card -> N real items, cards or checklist strings depending
+// on what this section actually is. A no-op when the node isn't collapsed.
+function expandCollapsed(node, kind) {
+  const g = asObject(node);
+  const c = collapsedBullets(g);
+  if (!c) return g;
+  if (kind === "checklist") return { ...g, items: c.bullets };
+  if (!c.bullets.every((b) => splitBullet(b))) return g;
+  return { ...g, items: c.bullets.map((b) => ({ ...splitBullet(b), icon: c.only.icon || g.icon || "" })) };
+}
 
-    if (hasHeading && hasParagraphs && !hasOwnItems && nextHasItems) {
-      // CardGroup — the renderer the merged node is headed for, since it now
-      // carries `items` — reads its intro line from `subtitle`, a single
-      // string, not from `paragraphs` (that is Prose's field, and Prose
-      // never looks at `items` at all: leaving `paragraphs` set here made
-      // renderNode's dispatch pick Prose over CardGroup, drawing the
-      // heading and intro and silently discarding all eight cards).
-      out.push({
-        titleLead: g.titleLead,
-        highlight: g.highlight,
-        subtitle: g.paragraphs.filter((t) => String(t || "").trim()).join(" "),
-        bg: g.bg,
-        columns: next.columns,
-        items: next.items,
-      });
-      i += 1; // the next node's heading was only a label — never rendered
-      continue;
-    }
-    out.push(g);
+// A real item: a non-empty string, or an object with a title/desc/bullets of
+// its own — not `blankSection`'s placeholder (an array of empty strings, or
+// of `{icon:"",title:"",desc:""}` objects) that a target the engine never
+// filled gets by default.
+const hasRealItem = (item) => (typeof item === "string" ? item.trim().length > 0
+  : !!item && (String(item.title || "").trim() || String(item.desc || "").trim() || (item.bullets || []).length));
+const hasRealContent = (node) => !!node && (headingOf(node)
+  || (node.items || []).some(hasRealItem) || (node.paragraphs || []).some((t) => String(t || "").trim()));
+
+// The card that collapsed a heading + its own bullet list into one item is
+// "cards"-shaped by then, which means the generic merge engine's kind-gated
+// matching can never route its OUTER heading to the prose-shaped `prose`
+// slot it actually belongs to — that slot instead gets whatever unrelated
+// prose-shaped block scores best by elimination. Found by shape (wherever it
+// landed: any of the 9 sections, or loose in the `cardGroups` overflow) and
+// split in two: the outer heading becomes `prose`'s real content, the inner
+// bullets become `whatWeHandle`'s. Whatever `prose` held before — the wrong
+// block that won it by elimination — is not discarded; it is queued as its
+// own stray so the next step can find where IT actually belongs.
+//
+// Scoped to a collapse whose OUTER heading does not already belong to the
+// section it is sitting in — "Why Payroll Management Is Essential…" and "Why
+// Choose Outsourced Payroll…" collapse the exact same way but are already
+// correctly keyed; those are left for expandCollapsed's plain in-place fix
+// below, not routed through this split.
+function recoverCollapsedCard(rawC) {
+  const out = { ...rawC };
+
+  let at;
+  for (const key of Object.keys(SECTION_KIND)) {
+    const c = collapsedBullets(out[key]);
+    if (c && !sameHeading(SECTION_EXAMPLE[key], out[key])) { at = key; break; }
   }
+  let overflowIndex = -1;
+  if (at === undefined) {
+    overflowIndex = toArray(out.cardGroups).findIndex((n) => collapsedBullets(n));
+  }
+  if (at === undefined && overflowIndex === -1) return out;
+
+  const node = at !== undefined ? out[at] : out.cardGroups[overflowIndex];
+  const { only, bullets } = collapsedBullets(node);
+
+  if (at !== undefined) delete out[at];
+  else out.cardGroups = out.cardGroups.filter((_, i) => i !== overflowIndex);
+
+  if (!hasRealContent(out.whatWeHandle)) out.whatWeHandle = { items: bullets, titleLead: only.title };
+
+  const displaced = hasRealContent(out.prose) ? out.prose : null;
+  out.prose = { titleLead: node.titleLead, highlight: node.highlight, bg: node.bg, paragraphs: [] };
+  if (displaced) out.cardGroups = [...toArray(out.cardGroups), displaced];
   return out;
 }
 
-/* ── Rendering one node by its shape ─────────────────────────────────────── */
-// The SHAPE of a node picks its renderer — paragraphs is prose, string items
-// a checklist, object items a card grid, rows a table — the same dispatch
-// ../../_ServiceLayout.ServiceLayout uses for its own ordered lists. A
-// `__split` node (see splitCollapsedCard) draws through SplitSection instead,
-// and "How Our Payroll Management System Works" draws through
-// HighlightedCardGroup instead of the plain CardGroup — see its own comment.
-const isHowItWorks = (g) =>
-  /^how our payroll management/i.test(String(g.titleLead || "").trim());
+// Any named section left with no real content of its own gets whatever
+// belongs to it out of the `cardGroups` overflow — its heading and its items
+// looked for independently, since the engine can split what belongs together
+// (a stray heading with no items, elsewhere a block of real items under a
+// generic or borrowed heading) across two different overflow entries rather
+// than losing either.
+function reuniteStrayHeadings(rawC) {
+  const out = { ...rawC };
+  const overflow = toArray(out.cardGroups);
+  const used = new Set();
+  const emptyTargets = Object.keys(SECTION_EXAMPLE).filter((key) => !hasRealContent(out[key]));
 
+  // Pass 1: match by heading, heading-only strays and items-bearing entries
+  // scored independently against each empty target.
+  for (const key of emptyTargets) {
+    const headingSource = overflow.findIndex((node, i) => !used.has(i) && !(node.items || []).some(hasRealItem)
+      && headingOf(node) && sameHeading(SECTION_EXAMPLE[key], node));
+    const itemsSource = overflow.findIndex((node, i) => !used.has(i) && i !== headingSource
+      && (node.items || []).some(hasRealItem) && sameHeading(SECTION_EXAMPLE[key], node));
+    if (headingSource === -1 && itemsSource === -1) continue;
+
+    const h = headingSource !== -1 ? overflow[headingSource] : null;
+    const it = itemsSource !== -1 ? overflow[itemsSource] : null;
+    out[key] = {
+      titleLead: h?.titleLead ?? it?.titleLead, highlight: h?.highlight ?? it?.highlight,
+      subtitle: (h?.paragraphs || []).filter((t) => String(t || "").trim()).join(" ") || it?.subtitle,
+      bg: it?.bg ?? h?.bg, columns: it?.columns, items: it?.items,
+    };
+    if (headingSource !== -1) used.add(headingSource);
+    if (itemsSource !== -1) used.add(itemsSource);
+  }
+
+  // Pass 2: elimination. A target still without real items, and an
+  // items-bearing overflow entry no target claimed by heading — with only
+  // one of each left, the remaining content and the remaining home are each
+  // other's, whatever the overflow entry's own heading says.
+  const stillEmpty = emptyTargets.filter((key) => !(out[key]?.items || []).some(hasRealItem));
+  const leftoverItems = overflow.map((n, i) => ({ n, i })).filter(({ n, i }) => !used.has(i) && (n.items || []).some(hasRealItem));
+  if (stillEmpty.length === 1 && leftoverItems.length === 1) {
+    const key = stillEmpty[0];
+    const { n, i } = leftoverItems[0];
+    const existing = asObject(out[key]);
+    out[key] = { ...n, titleLead: existing.titleLead ?? n.titleLead, highlight: existing.highlight ?? n.highlight };
+    used.add(i);
+  }
+
+  if (used.size) out.cardGroups = overflow.filter((_, i) => !used.has(i));
+  return out;
+}
+
+function normalizePayrollContent(rawC) {
+  let c = recoverCollapsedCard(rawC);
+  c = reuniteStrayHeadings(c);
+  for (const [key, kind] of Object.entries(SECTION_KIND)) {
+    if (c[key]) c[key] = expandCollapsed(c[key], kind);
+  }
+  return c;
+}
+
+// Dispatch a node to the renderer its own shape calls for — the same
+// shape-first dispatch Bookkeeping uses for its own `cardGroups` array,
+// reused here for the small overflow list below.
 function renderNode(node, key) {
   const g = asObject(node);
-  if (g.__split) return <SplitSection key={key} parent={g.parent} sub={g.sub} />;
   if (Array.isArray(g.rows)) return <ComparisonTable key={key} data={g} />;
   if (Array.isArray(g.paragraphs)) return <Prose key={key} data={{ ...g, bg: g.bg || "paper" }} />;
   if (typeof g.items?.[0] === "string") return <Checklist key={key} data={g} />;
-  if (isHowItWorks(g)) return <HighlightedCardGroup key={key} data={g} />;
   return <CardGroup key={key} data={g} />;
+}
+
+// "End-to-End Payroll Management You Can Rely On" and "What We Handle for
+// Your Business" are one band on the reference page, not two: a centred h2 +
+// intro paragraph, then a smaller h3 and the checklist directly beneath it,
+// no seam between them. `prose` and `whatWeHandle` are still two separate
+// template sections — a document can write to either independently — but
+// they draw together here, the checklist embedded (smaller heading, no band
+// of its own) the same way ../Tax nests a sub-block under a numbered parent.
+function EndToEndSection({ prose, checklist }) {
+  const p = asObject(prose);
+  const hasHeading = p.titleLead || p.highlight;
+  const hasParagraphs = (p.paragraphs || []).some((t) => String(t || "").trim());
+  if (!hasHeading && !hasParagraphs && isEmptySection(checklist)) return null;
+
+  const theme = useTheme();
+  const primary = theme.palette.primary.main;
+  const bg = p.bg === "default" ? "background.default" : "background.paper";
+
+  return (
+    <Box sx={{ py: { xs: 8, md: 12 }, bgcolor: bg }}>
+      <Container maxWidth={false} sx={{ maxWidth: "1200px", mx: "auto", px: { xs: 3, md: 4 } }}>
+        {(hasHeading || hasParagraphs) && (
+          <Box sx={{ mb: { xs: 5, md: 7 }, textAlign: "center" }}>
+            {hasHeading && (
+              <Typography variant="h2" sx={{ fontSize: { xs: "2rem", md: "2.6rem" }, lineHeight: 1.2 }}>
+                {p.titleLead}{" "}
+                <Box component="span" sx={{ color: primary }}>{p.highlight}</Box>
+              </Typography>
+            )}
+            {(p.paragraphs || []).map((text, i) => (
+              <Typography
+                key={i}
+                sx={{ color: "text.secondary", fontSize: "1rem", lineHeight: 1.85, maxWidth: 760, mx: "auto", mt: 2, fontFamily: '"Outfit", sans-serif' }}
+              >
+                {text}
+              </Typography>
+            ))}
+          </Box>
+        )}
+        <Checklist data={checklist} embedded />
+      </Container>
+    </Box>
+  );
 }
 
 // CardGroup draws every card the same way; the reference page's "How Our
@@ -251,10 +353,8 @@ function renderNode(node, key) {
 // Columns are fixed at 2, not read from `data.columns`: db/templates/
 // payroll.json stores 4 for this slot (a generic column count derived for
 // CardGroup's own uniform grid), but this section was never a uniform
-// four-across row — it is four cards at roughly card-sized width apiece,
-// two per row, which only reads correctly as 2 columns. Trusting the
-// template's value here put all four cards in one row, each a quarter the
-// width the reference page actually gives them.
+// four-across row — it is four cards at roughly card-sized width apiece, two
+// per row, which only reads correctly as 2 columns.
 function HighlightedCardGroup({ data }) {
   const theme = useTheme();
   const primary = theme.palette.primary.main;
@@ -356,45 +456,6 @@ function HighlightedCardGroup({ data }) {
   );
 }
 
-// One band: the recovered section's own heading and intro copy, centred, then
-// the sub-heading's real items directly beneath — embedded, so it draws with
-// no band or padding of its own and an h3 in place of the section's h2. The
-// same shape ../Tax's NestedTaxSection draws for a numbered parent and its
-// sub-blocks, simplified to the single embedded child this service needs.
-function SplitSection({ parent, sub }) {
-  const theme = useTheme();
-  const primary = theme.palette.primary.main;
-  const band = parent.bg === "paper" ? "background.paper" : "background.default";
-  return (
-    <Box component="section" sx={{ py: { xs: 8, md: 12 }, bgcolor: band }}>
-      <Container maxWidth={false} sx={{ maxWidth: "1200px", mx: "auto", px: { xs: 3, md: 4 } }}>
-        <Box sx={{ textAlign: "center", mb: { xs: 5, md: 7 } }}>
-          {(parent.titleLead || parent.highlight) && (
-            <Typography variant="h2" sx={{ fontSize: { xs: "2rem", md: "2.6rem" }, lineHeight: 1.2 }}>
-              {parent.titleLead}{" "}
-              <Box component="span" sx={{ color: primary }}>{parent.highlight}</Box>
-            </Typography>
-          )}
-          {parent.paragraphs.map((text, i) => (
-            <Typography
-              key={i}
-              sx={{
-                color: "text.secondary", fontSize: "1rem", lineHeight: 1.8,
-                maxWidth: 780, mx: "auto", mt: 2, fontFamily: '"Outfit", sans-serif',
-              }}
-            >
-              {text}
-            </Typography>
-          ))}
-        </Box>
-        {typeof sub.items?.[0] === "string"
-          ? <Checklist data={sub} embedded />
-          : <CardGroup data={sub} embedded />}
-      </Container>
-    </Box>
-  );
-}
-
 /**
  * @param {object}  content   servicelayout/v1 object from the page row
  * @param {object}  seo       row SEO, applied unless `preview`
@@ -414,16 +475,11 @@ export default function PayrollTemplate({
 }) {
   useFullSEO(preview ? null : seo);
 
-  const c =
+  const rawC =
     content && typeof content === "object" && !Array.isArray(content) ? content : rest;
+  const c = normalizePayrollContent(rawC);
 
   const hero = resolveHero(c, { fallbackTitle, fallbackDescription, state });
-
-  const bodyNodes = mergeHollowWithItems(
-    bodyOrder(c)
-      .map((id) => resolveNode(c, id))
-      .filter((n) => !isEmptySection(n)),
-  ).flatMap(splitCollapsedCard);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", position: "relative" }}>
@@ -439,11 +495,41 @@ export default function PayrollTemplate({
         fallbackAlt="Payroll management services"
       />
 
-      {/* 3+ — Everything else, in the order the document wrote it. See the
-          file header for why this reads content.order rather than trusting
-          which key each block landed under, and for what the two recovery
-          passes below fix. */}
-      {bodyNodes.map((node, i) => renderNode(node, i))}
+      {/* Content a document wrote that matched no named section below — kept,
+          never dropped, the same way Bookkeeping keeps anything extra in its
+          own `cardGroups` array. Empty on every page today. */}
+      {toArray(c.cardGroups).map((raw, i) => renderNode(raw, `extra-${i}`))}
+
+      {/* 3+4 — "End-to-End Payroll Management You Can Rely On" and "What We
+          Handle for Your Business", one band. See EndToEndSection above. */}
+      <EndToEndSection prose={c.prose} checklist={c.whatWeHandle} />
+
+      {/* 5 — "How Our Payroll Management System Works". 4 cards, one highlighted. */}
+      <HighlightedCardGroup data={asObject(c.howItWorks)} />
+
+      {/* 6 — "Why Payroll Management Is Essential for US Businesses". 5 cards. */}
+      <CardGroup data={asObject(c.whyEssential)} />
+
+      {/* 7 — "Why Choose Outsourced Payroll Management Services?". 4 cards, 2 cols. */}
+      <CardGroup data={{ ...asObject(c.whyChoose), columns: asObject(c.whyChoose).columns || 2 }} />
+
+      {/* 8 — "Is Payroll Outsourcing the Right Fit for Your Business?". Checklist. */}
+      <Checklist data={asObject(c.rightFit)} />
+
+      {/* 9 — "Key Advantages of Outsourced Payroll Management". 4 cards, 2 cols. */}
+      <CardGroup data={{ ...asObject(c.keyAdvantages), columns: asObject(c.keyAdvantages).columns || 2 }} />
+
+      {/* 10 — "Best Practices for Accurate Payroll Management". Checklist, 4 cols. */}
+      <Checklist data={asObject(c.bestPractices)} />
+
+      {/* 11 — "Trusted Payroll Data Security & Compliance". Checklist. */}
+      <Checklist data={asObject(c.dataSecurity)} />
+
+      {/* 12 — "Payroll Management Services by Milta Accounting". 8 cards, 4 cols. */}
+      <CardGroup data={asObject(c.servicesByMilta)} />
+
+      {/* 13 — "Partner with a Trusted Payroll Management Company". Closing + CTA. */}
+      <Prose data={{ ...asObject(c.closing), bg: asObject(c.closing).bg || "paper" }} />
 
       {/* + — FAQ. */}
       <FAQSection faqs={toArray(c.faqs)} heading={c.faqsHeading} />

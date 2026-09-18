@@ -159,6 +159,17 @@ const isKnownHeading = (text) => {
 // it had any — carried on a plain prose node, never lost), then its items in
 // order, with any item whose title is a known heading pulled out as its own
 // section and everything else kept together in the card grid it came from.
+//
+// A host with NO heading of its own (titleLead and highlight both empty) is
+// the one case that text is NOT emitted as its own section: unlabelled lead-in
+// prose ahead of a heading it never had is a stray paragraph sitting in front
+// of whatever it actually introduces, not a section in its own right — the
+// Michigan document's "Understanding the Right Leadership for Your Business…"
+// is exactly this, sitting orphaned ahead of "What are Financial Controller
+// Services?" instead of serving as that section's own opening paragraph.
+// Prepended instead to the first recovered heading's own paragraph, so the
+// words render where they read as belonging, never dropped and never split
+// off into their own headless block.
 function recoverSections(node) {
   const g = asObject(node);
   const items = Array.isArray(g.items) ? g.items : null;
@@ -167,17 +178,11 @@ function recoverSections(node) {
   }
 
   const out = [];
+  const hasOwnHeading = !!(g.titleLead || g.highlight);
+  const leadParagraphs = [g.subtitle, g.footnote].filter(Boolean);
 
-  // The host's own opening text — heading, subtitle, footnote — belongs to
-  // whatever section it introduced, not to any one of its cards, so it is
-  // never attached to an item. Emitted once, up front, whenever there is any.
-  if (g.titleLead || g.highlight || g.subtitle || g.footnote) {
-    out.push({
-      titleLead: g.titleLead,
-      highlight: g.highlight,
-      paragraphs: [g.subtitle, g.footnote].filter(Boolean),
-      bg: g.bg,
-    });
+  if (hasOwnHeading) {
+    out.push({ titleLead: g.titleLead, highlight: g.highlight, paragraphs: leadParagraphs, bg: g.bg });
   }
 
   let pending = [];
@@ -185,10 +190,20 @@ function recoverSections(node) {
     if (pending.length) out.push({ bg: g.bg, columns: g.columns, items: pending });
     pending = [];
   };
+  let unclaimedLead = hasOwnHeading ? [] : leadParagraphs;
   for (const item of items) {
     if (item && typeof item === "object" && isKnownHeading(item.title)) {
       flushPending();
-      out.push({ titleLead: item.title, paragraphs: [item.desc].filter(Boolean), bg: g.bg });
+      // `trailingParagraph` — see recoverIntro — is a second paragraph the
+      // parser split away from this item's own `desc` (both belong to THIS
+      // heading, in that order), never a lead-in, so it is appended, not
+      // prepended like unclaimedLead.
+      out.push({
+        titleLead: item.title,
+        paragraphs: [...unclaimedLead, item.desc, item.trailingParagraph].filter(Boolean),
+        bg: g.bg,
+      });
+      unclaimedLead = [];
     } else {
       pending.push(item);
     }
@@ -284,6 +299,98 @@ function attachLeadingHeadings(nodes) {
   return out;
 }
 
+/* ── Recovering an intro the parser folded into the NEXT section's card ───── *
+ *
+ * The same fold the file header's "KNOWN LIMITATION" describes for five
+ * short back-to-back sections also happens to the very first one: the
+ * document's opening heading + its two lead paragraphs, plus the *next*
+ * section's heading and description, sometimes land together as ONE
+ * "cards"-shaped block (one item, that item's own title a known section
+ * heading). A "cards"-shaped block can never match the `intro` target —
+ * `intro` is prose-kind, and the merge engine gates matching on kind before
+ * it ever looks at the heading — so `content.intro` is left blank and the
+ * page's photo/stats banner renders with no words at all, while the exact
+ * text that belongs there sits, unlabelled as a banner but otherwise
+ * correct, as a plain paragraph further down the page. Confirmed on the live
+ * Michigan row before this fix, not a hypothetical — Connecticut's own blank
+ * intro turned out to be a different thing entirely (its source document
+ * never wrote that section at all, so there is nothing to recover), which is
+ * exactly why this only acts when a real, shaped match is found rather than
+ * inventing intro copy for a page that genuinely has none.
+ *
+ * Recovered by heading, matched against the intro section's own
+ * exampleHeading, and ONLY when `content.intro` is actually blank — a page
+ * that already has real intro copy is never touched.
+ *
+ * `subtitle` and `footnote` on this folded block are NOT both the intro's —
+ * checked directly against the Michigan source document (the admin pasted
+ * the original alongside the rendered page): `subtitle` is genuinely the
+ * intro's own paragraph, but `footnote` is the embedded item's SECOND
+ * paragraph, the one after its own `desc` — the parser lost the paragraph
+ * break between them and left both as one trailing field on the host instead
+ * of on the item they actually continue. Taking `footnote` for the intro (an
+ * earlier version of this fix did exactly that) moved a whole paragraph into
+ * the wrong section — present, but under the wrong heading, which is the
+ * same "unordered" failure as losing it outright. `subtitle` alone becomes
+ * the intro's paragraph; `footnote` travels with the embedded item as its
+ * `trailingParagraph`, for recoverSections to append after that item's own
+ * `desc` exactly as the source document orders them.
+ */
+const INTRO_EXAMPLE_WORDS = normalizeWords(
+  (STRUCTURE.sections || []).find((s) => s.key === "intro")?.exampleHeading || "",
+);
+
+const hasRealIntro = (intro) => {
+  const g = asObject(intro);
+  return !!(String(g.titleLead || "").trim() || String(g.highlight || "").trim()
+    || (g.paragraphs || []).some((t) => String(t || "").trim()));
+};
+
+function looksLikeFoldedIntro(node) {
+  const g = asObject(node);
+  const items = Array.isArray(g.items) ? g.items : [];
+  if (items.length !== 1 || !items[0] || typeof items[0] !== "object") return false;
+  if (!INTRO_EXAMPLE_WORDS.length) return false;
+  const headingWords = normalizeWords([g.titleLead, g.highlight].filter(Boolean).join(" "));
+  const shorter = Math.min(INTRO_EXAMPLE_WORDS.length, headingWords.length);
+  if (shorter < 3) return false;
+  for (let i = 0; i < shorter; i += 1) if (INTRO_EXAMPLE_WORDS[i] !== headingWords[i]) return false;
+  return true;
+}
+
+function recoverIntro(rawC) {
+  if (hasRealIntro(rawC.intro)) return rawC;
+  for (const id of bodyOrder(rawC)) {
+    const node = resolveNode(rawC, id);
+    if (!looksLikeFoldedIntro(node)) continue;
+
+    const out = { ...rawC };
+    out.intro = {
+      titleLead: node.titleLead,
+      highlight: node.highlight,
+      paragraphs: [node.subtitle].filter((t) => String(t || "").trim()),
+      ctaLabel: node.ctaLabel,
+    };
+    // The footnote belongs to the embedded item, as its second paragraph —
+    // see the comment above — carried across only when there is exactly one
+    // item to attach it to (the shape this recovery only ever matches).
+    const footnote = String(node.footnote || "").trim();
+    const items = footnote && Array.isArray(node.items) && node.items.length === 1
+      ? [{ ...node.items[0], trailingParagraph: footnote }]
+      : node.items;
+    const stripped = { items, bg: node.bg, columns: node.columns };
+    const m = /^([A-Za-z]+)\.(\d+)$/.exec(id);
+    if (m) {
+      out[m[1]] = out[m[1]].slice();
+      out[m[1]][Number(m[2])] = stripped;
+    } else {
+      out[id] = stripped;
+    }
+    return out;
+  }
+  return rawC;
+}
+
 /* ── Rendering one node by its shape ─────────────────────────────────────── */
 // The SHAPE of a node picks its renderer — paragraphs is prose, string items a
 // checklist, object items a card grid, rows a table (the "Capabilities"
@@ -317,8 +424,9 @@ export default function FinancialControllerTemplate({
 }) {
   useFullSEO(preview ? null : seo);
 
-  const c =
+  const rawC =
     content && typeof content === "object" && !Array.isArray(content) ? content : rest;
+  const c = recoverIntro(rawC);
 
   const hero = resolveHero(c, { fallbackTitle, fallbackDescription, state });
 
